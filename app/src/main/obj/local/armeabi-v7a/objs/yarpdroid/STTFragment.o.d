@@ -37,6 +37,7 @@ obj/local/armeabi-v7a/objs/yarpdroid/STTFragment.o: jni/STTFragment.cpp \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/impl/String.h \
  /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/android/log.h \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cerrno \
+ /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib \
  jni/com_alecive_yarpdroid_STTFragment.h \
  /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h \
  jni/handle.h
@@ -116,6 +117,8 @@ obj/local/armeabi-v7a/objs/yarpdroid/STTFragment.o: jni/STTFragment.cpp \
 /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/android/log.h:
 
 /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cerrno:
+
+/home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib:
 
 jni/com_alecive_yarpdroid_STTFragment.h:
 

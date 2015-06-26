@@ -16,6 +16,9 @@ public class yarpviewFragment extends Fragment {
     private ImageView imgLeft;
     private ImageView imgRight;
 
+    private long viewLeftHandle;
+    private long viewRightHandle;
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -50,4 +53,9 @@ public class yarpviewFragment extends Fragment {
 
         return rootView;
     }
+
+    private        native void    createBufferedImgPortL();
+    private        native void    createBufferedImgPortR();
+//    private native void getImageRight();
+//    private native void getImageLeft();
 }

@@ -21,7 +21,7 @@
             android:elevation="8dp"
             app:theme="@style/ToolbarStyle"
             app:popupTheme="@style/Theme.AppCompat.NoActionBar"
-            android:fitsSystemWindows="true"/>
+            android:fitsSystemWindows="true" />
 
         <android.support.design.widget.TabLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

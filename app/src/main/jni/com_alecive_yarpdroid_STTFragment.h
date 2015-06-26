@@ -9,19 +9,27 @@ extern "C" {
 #endif
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
+ * Method:    register
+ * Signature: ()V
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_register
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_STTFragment
+ * Method:    printDataReceivedonPort
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_getDataReceivedonPort
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_alecive_yarpdroid_STTFragment
  * Method:    testCallbackStatic
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_testCallbackStatic
   (JNIEnv *, jclass);
-
-/*
- * Class:     com_alecive_yarpdroid_STTFragment
- * Method:    testCallbackNonStatic
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_testCallbackNonStatic
-  (JNIEnv *, jobject);
 
 /*
  * Class:     com_alecive_yarpdroid_STTFragment

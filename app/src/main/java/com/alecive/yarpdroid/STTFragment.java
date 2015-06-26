@@ -36,7 +36,7 @@ public class STTFragment extends Fragment {
 
     private static final String TAG = "STTFragment";
 
-    private long nativeHandle;
+    private long STTPortHandle;
 
     /**
      * The fragment argument representing the section number for this
@@ -51,7 +51,7 @@ public class STTFragment extends Fragment {
 
     private void nonStaticTestMethod(String str)
     {
-        txtSpeechInput.setText(str);
+//        txtSpeechInput.setText(str);
         Log.i(TAG, str);
     }
 
@@ -73,7 +73,10 @@ public class STTFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initNative();
+        register();
+        createBufferedPort();
+        destroyBufferedPort();
+        createBufferedPort();
     }
 
     @Override
@@ -174,9 +177,10 @@ public class STTFragment extends Fragment {
         destroyBufferedPort();
     }
 
-    private static native void testCallbackStatic();
-    private        native void testCallbackNonStatic();
-    private        native void createBufferedPort();
-    private        native void writeOntoBufferedPort(String textToSend);
-    private        native void destroyBufferedPort();
+    private        native boolean register();
+    private        native void    gettDataReceivedonPort(String textToSend);
+    private static native void    testCallbackStatic();
+    private        native void    createBufferedPort();
+    private        native void    writeOntoBufferedPort(String textToSend);
+    private        native void    destroyBufferedPort();
 }

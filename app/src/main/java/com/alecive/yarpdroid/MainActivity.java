@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.abc_ic_search_api_mtrl_alpha);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_action_menu);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_search:
+                Snackbar.make(mViewPager, initNetwork(), Snackbar.LENGTH_LONG).show();
                 return true;
         }
 

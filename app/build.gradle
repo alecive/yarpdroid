@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.alecive.yarpdroid"
-        minSdkVersion 15
-        targetSdkVersion 19
+        minSdkVersion 11
+        targetSdkVersion 11
         versionCode 1
         versionName "1.0"
     }

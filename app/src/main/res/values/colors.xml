@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#ffffff</color>
-    <color name="bg_gradient_start">#cccccc</color>
-    <color name="bg_gradient_end">#ffffff</color>
     <color name="actionbar_background">#03bcd4</color>
     <color name="statusbar_background">#039fb3</color>
     <color name="tablayout_accent">#f4ff81</color>
@@ -10,4 +8,11 @@
     <color name="tab_color_highlight">#ffffff</color>
     <color name="tab_color">#eeeeee</color>
     <color name="button_color">#e91e63</color>
+    <color name="button_color_2">#880e4f</color>
+    <color name="colorPrimary">#03bcd4</color>
+    <color name="colorPrimaryDark">#039fb3</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">@android:color/transparent</color>
+    <color name="colorAccent">#f4ff81</color>
 </resources>
