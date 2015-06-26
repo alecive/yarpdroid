@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:columnCount="1"
+    android:rowCount="2">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:id="@+id/imgLeft"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/cam_left" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:id="@+id/imgRight"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/cam_right" />
+</GridLayout>

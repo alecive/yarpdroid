@@ -25,7 +25,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := yarpdroid
-LOCAL_SRC_FILES := main.cpp
+LOCAL_SRC_FILES := STTFragment.cpp yarpdroidMainActivity.cpp
 LOCAL_STATIC_LIBRARIES := libYARP_OS libYARP_init
 LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
 include $(BUILD_SHARED_LIBRARY)

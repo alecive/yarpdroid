@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity$PlaceholderFragment"
+    android:background="@color/white"
+    android:layout_margin="0dp">
+
+    <TextView
+        android:id="@+id/txtSpeechInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:textColor="@color/text_color"
+        android:textSize="32sp"
+        android:textStyle="normal" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Init Native"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:id="@+id/btnInitNative"
+        android:background="@color/button_color"
+        android:elevation="16dp"
+        android:padding="24dp"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fini Native"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:id="@+id/btnFiniNative"
+        android:background="@color/button_color"
+        android:elevation="16dp"
+        android:padding="24dp"
+        android:layout_centerInParent="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tap_on_mic"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:id="@+id/btnSpeak"
+        android:background="@color/button_color"
+        android:elevation="16dp"
+        android:padding="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
