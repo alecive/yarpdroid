@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:title="yarp namespace"
+        android:key="@string/yarp_namespace"
+        android:summary="@string/yarp_namespace"/>
+    <EditTextPreference android:title="yarpserver IP"
+        android:key="@string/yarp_server"
+        android:summary="@string/yarp_server"/>
+    <EditTextPreference android:title="yarpserver port"
+        android:key="@string/yarp_server_port"
+        android:summary="@string/yarp_server_port"/>
+</PreferenceScreen>

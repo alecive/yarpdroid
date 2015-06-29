@@ -1,5 +1,6 @@
 package com.alecive.yarpdroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -111,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_settings:
-                mDrawerLayout.openDrawer(GravityCompat.START);
+            case R.id.action_preferences:
+                Intent i = new Intent(this, PreferencesActivity.class);
+                startActivity(i);
                 return true;
             case R.id.action_search:
                 Snackbar.make(mViewPager, initNetwork(), Snackbar.LENGTH_LONG).show();
@@ -157,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return "view".toUpperCase(l);
                 case 2:
-                    return "boh".toUpperCase(l);
+                    return "joints".toUpperCase(l);
             }
             return null;
         }
@@ -165,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
     static{
         System.loadLibrary("yarpdroid");
-        Log.i(TAG, "yarpdroid loaded successfully");
+        Log.i(TAG, "yarpdroid C++ library loaded successfully");
     }
 
     public native String initNetwork();

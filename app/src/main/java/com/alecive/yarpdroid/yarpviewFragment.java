@@ -54,8 +54,9 @@ public class yarpviewFragment extends Fragment {
         return rootView;
     }
 
+    private        native boolean register();
     private        native void    createBufferedImgPortL();
-    private        native void    createBufferedImgPortR();
+    private        native void    destroyBufferedImgPortL();
 //    private native void getImageRight();
 //    private native void getImageLeft();
 }
