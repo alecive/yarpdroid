@@ -3,6 +3,7 @@ obj/local/armeabi-v7a/objs/yarpdroid/yarpdroidMainActivity.o: \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cerrno \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/string \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib \
+ /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream \
  /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/android/log.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Network.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/ContactStyle.h \
@@ -28,13 +29,16 @@ obj/local/armeabi-v7a/objs/yarpdroid/yarpdroidMainActivity.o: \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Property.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/NameStore.h \
  jni/com_alecive_yarpdroid_MainActivity.h \
- /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h
+ /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h \
+ jni/handle.h
 
 /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cerrno:
 
 /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/string:
 
 /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib:
+
+/home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream:
 
 /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/android/log.h:
 
@@ -87,3 +91,5 @@ obj/local/armeabi-v7a/objs/yarpdroid/yarpdroidMainActivity.o: \
 jni/com_alecive_yarpdroid_MainActivity.h:
 
 /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h:
+
+jni/handle.h:

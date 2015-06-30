@@ -9,6 +9,22 @@ extern "C" {
 #endif
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    register
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    gettImgReceivedonPort
+ * Signature: ([B)V
+ */
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPort
+  (JNIEnv *, jobject, jbyteArray);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
  * Method:    createBufferedImgPortL
  * Signature: ()V
  */
@@ -17,10 +33,10 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuffere
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
- * Method:    createBufferedImgPortR
+ * Method:    destroyBufferedImgPortL
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortR
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedImgPortL
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

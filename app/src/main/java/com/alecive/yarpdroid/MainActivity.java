@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         setupDrawerLayout();
         Log.i(TAG,"AbsolutePath for creating files:"+getFilesDir().getAbsolutePath());
+        long threadId = Thread.currentThread().getId();
+        Log.i(TAG,"Thread # " + threadId + " is doing this task");
 //        initNetwork();
     }
 
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1: // Fragment # 1 - This will show YarpviewFragment
                     return yarpviewFragment.newInstance(position + 1);
                 case 2: // Fragment # 1 - This will show SecondFragment
-                    return STTFragment.newInstance(position + 1);
+                    return jointsFragment.newInstance(position + 1);
                 default:
                     return null;
             }

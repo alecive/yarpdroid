@@ -9,12 +9,12 @@
     <ImageView
         android:layout_width="fill_parent"
         android:id="@+id/imgLeft"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_horizontal|top"
         android:contentDescription="@string/cam_left" />
 
     <ImageView
         android:layout_width="fill_parent"
         android:id="@+id/imgRight"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_horizontal|bottom"
         android:contentDescription="@string/cam_right" />
 </GridLayout>

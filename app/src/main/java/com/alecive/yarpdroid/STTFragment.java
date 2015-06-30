@@ -44,17 +44,6 @@ public class STTFragment extends Fragment {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private static void staticTestMethod(String str)
-    {
-        Log.i(TAG, str);
-    }
-
-    private void nonStaticTestMethod(String str)
-    {
-//        txtSpeechInput.setText(str);
-        Log.i(TAG, str);
-    }
-
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -73,10 +62,6 @@ public class STTFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        register();
-        createBufferedPort();
-        destroyBufferedPort();
-        createBufferedPort();
     }
 
     @Override
@@ -118,6 +103,11 @@ public class STTFragment extends Fragment {
                 finiNative();
             }
         });
+
+        register();
+        createBufferedPort();
+        destroyBufferedPort();
+        createBufferedPort();
 
         return rootView;
     }
@@ -177,8 +167,19 @@ public class STTFragment extends Fragment {
         destroyBufferedPort();
     }
 
+    private static void staticTestMethod(String str)
+    {
+        Log.i(TAG, str);
+    }
+
+    private void nonStaticTestMethod(String str)
+    {
+//        txtSpeechInput.setText(str);
+        Log.i(TAG, str);
+    }
+
     private        native boolean register();
-    private        native void    gettDataReceivedonPort(String textToSend);
+    private        native void    getDataReceivedonPort(String textToSend);
     private static native void    testCallbackStatic();
     private        native void    createBufferedPort();
     private        native void    writeOntoBufferedPort(String textToSend);
