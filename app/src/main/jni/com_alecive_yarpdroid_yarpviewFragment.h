@@ -17,11 +17,19 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
- * Method:    gettImgReceivedonPort
+ * Method:    getImgReceivedonPort
  * Signature: ([B)V
  */
 JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPort
   (JNIEnv *, jobject, jbyteArray);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    getImgReceivedonPortStr
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPortStr
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment

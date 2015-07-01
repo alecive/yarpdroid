@@ -1,6 +1,6 @@
 package com.alecive.yarpdroid;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
 /**
@@ -8,14 +8,15 @@ import android.os.Bundle;
  */
 public class jointsFragment extends Fragment {
 
+    private static final String TAG = "jointsFragment";
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static STTFragment newInstance(int sectionNumber) {
-        STTFragment fragment = new STTFragment();
+    public static jointsFragment newInstance(int sectionNumber) {
+        jointsFragment fragment = new jointsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);

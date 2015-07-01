@@ -2,6 +2,8 @@ obj/local/armeabi-v7a/objs/yarpdroid/yarpviewFragment.o: \
  jni/yarpviewFragment.cpp \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/string \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream \
+ /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/fstream \
+ /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iomanip \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Bottle.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/ConstString.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/api.h \
@@ -51,6 +53,10 @@ obj/local/armeabi-v7a/objs/yarpdroid/yarpviewFragment.o: \
 /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/string:
 
 /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream:
+
+/home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/fstream:
+
+/home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iomanip:
 
 /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Bottle.h:
 
