@@ -81,7 +81,7 @@ public class yarpviewFragment extends Fragment {
         return result.toString();
     }
 
-    public void setImageViewWithByteArray(final ImageView view, byte[] data) {
+    public void setImageViewWithByteArray(final ImageView view, final byte[] data) {
         long threadId = Thread.currentThread().getId();
         Log.i(TAG,"Thread #" + threadId + " is doing this task");
         if (data==null) {
@@ -89,27 +89,22 @@ public class yarpviewFragment extends Fragment {
         }
         Log.i(TAG, "I am in setImageViewWithByteArray. Size of the byte array to display: "+data.length);
 
-        try {
-            String string = getHexString(data);
-            Log.w(TAG, "String Length" + string.length());
-            Log.w(TAG, string);
-        } catch (Exception e) {
-            e.printStackTrace();
+        int[] intArray = new int[data.length/3];
+
+        for (int i=0; i<data.length/3; i++) {
+            intArray[i] = 0xff000000 |
+                    ((int)data[i*3] << 16) | ((int)data[i*3+1] << 8) | (int)data[i*3+2];
         }
 
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inJustDecodeBounds = true;
-        opt.outWidth           = 320;
-        opt.outHeight          = 240;
-        opt.inDensity          = 3;
-        final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length,opt);
+        final Bitmap bitmap = Bitmap.createBitmap(320,240, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(intArray,0,320,0,0,320,240);
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 if (bitmap==null) {
                     Log.e(TAG,"Bitmap is NULL!");
-                    view.setImageResource(R.drawable.abc_btn_radio_material);
                 }
                 else {
                     view.setImageBitmap(bitmap);
@@ -117,35 +112,30 @@ public class yarpviewFragment extends Fragment {
             }
         });
 
-        File photo = null;
-
-        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/CiveTest");
-        boolean isPresent = true;
-        if (!docsFolder.exists()) {
-            isPresent = docsFolder.mkdir();
-        }
-        if (isPresent) {
-            photo = new File(docsFolder.getAbsolutePath(),"img.bmp");
-        }
-
-        try {
-            FileOutputStream fos=new FileOutputStream(photo.getPath());
-
-            fos.write(data);
-            fos.close();
-        }
-        catch (java.io.IOException e) {
-            Log.e("PictureDemo", "Exception in photoCallback", e);
-        }
+//        File photo = null;
 //
-//        File imgFile = new File(getActivity().getFilesDir().getAbsolutePath(), "img.bmp");
+//        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/CiveTest");
+//        boolean isPresent = true;
+//        if (!docsFolder.exists()) {
+//            isPresent = docsFolder.mkdir();
+//        }
+//        if (isPresent) {
+//            photo = new File(docsFolder.getAbsolutePath(),"imgOrig.bmp");
+//        }
 //
-//        if(imgFile.exists()){
-//             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//            if (myBitmap==null) {
-//                Log.e(TAG,"Bitmap is NULL!");
-//            }
-//             view.setImageBitmap(myBitmap);
+//        if(photo.exists()) {
+//            final Bitmap myBitmap = BitmapFactory.decodeFile(photo.getAbsolutePath());
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (myBitmap==null) {
+//                        Log.e(TAG,"Bitmap from FILE is NULL!");
+//                    }
+//                    else {
+//                        view.setImageBitmap(myBitmap);
+//                    }
+//                }
+//            });
 //        }
 
     }

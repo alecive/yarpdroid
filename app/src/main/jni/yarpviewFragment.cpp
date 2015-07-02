@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <stdio.h>
+#include <stdlib.h>
 #include <yarp/os/Bottle.h>
 #include <yarp/os/BufferedPort.h>
 #include <yarp/os/Time.h>
@@ -21,13 +22,13 @@ using namespace yarp::os;
 
 JavaVM   *gvm;
 
-class DataProcessorImg : public TypedReaderCallback<Image> {
+class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
     JNIEnv *env;
     jobject obj;
-    bool dataReceived;
+    int dataReceived;
 
-    virtual void onRead(Image& img) {
-        if(!dataReceived)
+    virtual void onRead(ImageOf<PixelRgb>& img) {
+        if(dataReceived%2==0)
         {
             JavaVMAttachArgs args;
             args.version = JNI_VERSION_1_6; // choose your JNI version
@@ -42,7 +43,7 @@ class DataProcessorImg : public TypedReaderCallback<Image> {
                 std::stringstream s;
                 s << "DATA RECEIVED! Size of the imgRaw: " << sizeof(imgRaw) << " " << img.getRawImageSize()
                   << " Img size:" << img.width() << "x" << img.height();
-                __android_log_print(ANDROID_LOG_WARN, LOG_TAG, s.str().c_str());
+                __android_log_print(ANDROID_LOG_INFO, LOG_TAG, s.str().c_str());
 //            std::stringstream ss;
 //            ss << std::hex << std::setfill('0');
 //            for (int i=0;i<img.getRawImageSize();i++)
@@ -51,20 +52,21 @@ class DataProcessorImg : public TypedReaderCallback<Image> {
 //            }
 //            __android_log_print(ANDROID_LOG_WARN, LOG_TAG, ss.str().c_str());
 
-            std::ofstream out;
-            out.open ("/sdcard/CiveTest/imgOrig.bmp", std::ios::out | std::ios::binary);
-            out.write (reinterpret_cast<char*>(imgRaw), img.getRawImageSize());
-            out.close ();
+//            std::ofstream out;
+//            out.open ("/sdcard/CiveTest/imgOrig.ppm", std::ios::out | std::ios::binary);
+//            out<< "P6\n" << img.width() << " " << img.height() <<"\n255\n";
+//            out.write (reinterpret_cast<char*>(imgRaw), img.getRawImageSize());
+//            out.close ();
 
             Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPort(env, obj, imgByte);
 
             gvm->DetachCurrentThread();
-            dataReceived=true;
         }
+        dataReceived++;
     }
 
     public:
-        DataProcessorImg(JNIEnv *_env, jobject _obj): env(_env), obj(_obj), dataReceived(false) {};
+        DataProcessorImg(JNIEnv *_env, jobject _obj): env(_env), obj(_obj), dataReceived(0) {};
 };
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
@@ -129,8 +131,8 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuffere
     }
 
     DataProcessorImg* processor = new DataProcessorImg(env, obj);
-    BufferedPort<Image> *ImgPortL;
-    ImgPortL = new BufferedPort<Image>;
+    BufferedPort<ImageOf<PixelRgb> > *ImgPortL;
+    ImgPortL = new BufferedPort<ImageOf<PixelRgb> >;
     ImgPortL->useCallback(*processor);
     if(!ImgPortL->open("/yarpdroid/imgL"))
     {
@@ -144,7 +146,7 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBuffer
   (JNIEnv *env, jobject obj)
 {
     __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm destroying the image port");
-    BufferedPort<Image>  *ImgPortL = getHandle<BufferedPort<Image>  >(env, obj, "viewLeftHandle");
+    BufferedPort<ImageOf<PixelRgb> >  *ImgPortL = getHandle<BufferedPort<ImageOf<PixelRgb> >  >(env, obj, "viewLeftHandle");
     delete ImgPortL;
     ImgPortL = 0;
 }
