@@ -105,10 +105,6 @@ public class STTFragment extends Fragment {
         });
 
         register();
-//        createBufferedPort();
-//        destroyBufferedPort();
-//        createBufferedPort();
-
         return rootView;
     }
 
@@ -129,8 +125,6 @@ public class STTFragment extends Fragment {
                     getString(R.string.speech_not_supported),
                     Toast.LENGTH_SHORT).show();
         }
-//        testCallbackStatic();
-//        testCallbackNonStatic();
     }
 
     /**
@@ -158,12 +152,12 @@ public class STTFragment extends Fragment {
     }
 
     private void initNative() {
-        Log.i(TAG,"I'm initializing the native stuff");
+        Log.i(TAG,"I'm opening the native port");
         createBufferedPort();
     }
 
     private void finiNative() {
-        Log.i(TAG,"I'm fining the native stuff");
+        Log.i(TAG,"I'm closing the native port");
         destroyBufferedPort();
     }
 

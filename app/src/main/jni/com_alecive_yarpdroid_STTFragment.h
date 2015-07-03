@@ -10,14 +10,14 @@ extern "C" {
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
  * Method:    register
- * Signature: ()V
+ * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_register
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
- * Method:    printDataReceivedonPort
+ * Method:    getDataReceivedonPort
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_getDataReceivedonPort

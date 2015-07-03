@@ -1,25 +1,17 @@
 package com.alecive.yarpdroid;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Point;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by alecive on 22/06/15. Blah
@@ -28,10 +20,15 @@ public class yarpviewFragment extends Fragment {
 
     private static final String TAG = "yarpviewFragment";
     private ImageView imgLeft;
-    private ImageView imgRight;
+
+    private Button btnInitNative;
+    private Button btnFiniNative;
 
     private long viewLeftHandle;
-    private long viewRightHandle;
+    private long monoLeftHandle;
+
+    private int screenHeight;
+    private int screenWidth;
 
     /**
      * The fragment argument representing the section number for this
@@ -69,14 +66,63 @@ public class yarpviewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.yarpview_fragment, container, false);
 
         imgLeft  = (ImageView) rootView.findViewById(R.id.imgLeft);
-        imgRight = (ImageView) rootView.findViewById(R.id.imgRight);
+        imgLeft.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    Log.e(TAG, "Sending touch coordinates to iKinGazeCtrl : " +
+                            String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()) + " " +
+                            (((int)event.getX()*320)/screenWidth) + "x" +
+                            (((int)event.getY()*240)/540));
+                    sendTouchEventsonMonoIPort("left",(((int)event.getX()*320)/screenWidth),
+                                                      (((int)event.getY()*240)/540), 1.0);
+                }
+                return true;
+            }
+        });
+
+        btnInitNative = (Button) rootView.findViewById(R.id.btnInitNative);
+        btnInitNative.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                initNative();
+            }
+        });
+        btnFiniNative = (Button) rootView.findViewById(R.id.btnFiniNative);
+        btnFiniNative.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finiNative();
+            }
+        });
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        screenHeight = displaymetrics.heightPixels;
+        screenWidth  = displaymetrics.widthPixels;
 
         register();
-//        createBufferedImgPortL();
-//        destroyBufferedImgPortL();
-//        createBufferedImgPortL();
 
         return rootView;
+    }
+
+    private void initNative() {
+        Log.i(TAG,"I'm opening the native ports");
+        if (!createBufferedImgPortL()) {
+            createBufferedImgPortL();
+        }
+
+        if (!createBufferedMonoIPort()) {
+            createBufferedMonoIPort();
+        }
+    }
+
+    private void finiNative() {
+        Log.i(TAG,"I'm fining the native ports");
+        destroyBufferedImgPortL();
+        destroyBufferedMonoIPort();
     }
 
     public static String getHexString(byte[] b) throws Exception {
@@ -105,11 +151,6 @@ public class yarpviewFragment extends Fragment {
         final Bitmap bitmap = Bitmap.createBitmap(320,240, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(intArray,0,320,0,0,320,240);
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        final int height = displaymetrics.heightPixels;
-        final int width = displaymetrics.widthPixels;
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -118,39 +159,13 @@ public class yarpviewFragment extends Fragment {
                     Log.e(TAG,"Bitmap is NULL!");
                 }
                 else {
-                    view.setImageBitmap(Bitmap.createScaledBitmap(bitmap,720,540,false));
+                    view.setImageBitmap(Bitmap.createScaledBitmap(bitmap,screenWidth,
+                                        (int)((screenWidth*240)/320),false));
                 }
             }
         });
 
-        Log.i(TAG, "setImageViewWithByteArray finished!" + width + " " + height);
-
-//        File photo = null;
-//
-//        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/CiveTest");
-//        boolean isPresent = true;
-//        if (!docsFolder.exists()) {
-//            isPresent = docsFolder.mkdir();
-//        }
-//        if (isPresent) {
-//            photo = new File(docsFolder.getAbsolutePath(),"imgOrig.bmp");
-//        }
-//
-//        if(photo.exists()) {
-//            final Bitmap myBitmap = BitmapFactory.decodeFile(photo.getAbsolutePath());
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (myBitmap==null) {
-//                        Log.e(TAG,"Bitmap from FILE is NULL!");
-//                    }
-//                    else {
-//                        view.setImageBitmap(myBitmap);
-//                    }
-//                }
-//            });
-//        }
-
+        Log.i(TAG, "setImageViewWithByteArray finished!" + screenWidth + " " + screenHeight);
     }
 
     public void setImgLeft(byte[] data) {
@@ -193,9 +208,14 @@ public class yarpviewFragment extends Fragment {
         setImageViewWithString(imgLeft, data);
     }
 
-    private        native boolean register();
-    private        native void    getImgReceivedonPort(byte[] img);
-    private        native void    getImgReceivedonPortStr(String imgStr);
-    private        native void    createBufferedImgPortL();
-    private        native void    destroyBufferedImgPortL();
+    private native boolean register();
+
+    private native boolean createBufferedImgPortL();
+    private native boolean destroyBufferedImgPortL();
+    private native void    getImgReceivedonPort(byte[] img);
+    private native void    getImgReceivedonPortStr(String imgStr);
+
+    private native boolean createBufferedMonoIPort();
+    private native boolean destroyBufferedMonoIPort();
+    private native boolean sendTouchEventsonMonoIPort(String cam, int u, int v, double z);
 }

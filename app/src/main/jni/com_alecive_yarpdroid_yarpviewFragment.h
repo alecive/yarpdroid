@@ -17,6 +17,22 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    createBufferedImgPortL
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortL
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    destroyBufferedImgPortL
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedImgPortL
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
  * Method:    getImgReceivedonPort
  * Signature: ([B)V
  */
@@ -33,19 +49,27 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceive
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
- * Method:    createBufferedImgPortL
- * Signature: ()V
+ * Method:    createBufferedMonoIPort
+ * Signature: ()Z
  */
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortL
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedMonoIPort
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
- * Method:    destroyBufferedImgPortL
- * Signature: ()V
+ * Method:    destroyBufferedMonoIPort
+ * Signature: ()Z
  */
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedImgPortL
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedMonoIPort
   (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    sendTouchEventsonMonoIPort
+ * Signature: (Ljava/lang/String;IID)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_sendTouchEventsonMonoIPort
+  (JNIEnv *, jobject, jstring, jint, jint, jdouble);
 
 #ifdef __cplusplus
 }

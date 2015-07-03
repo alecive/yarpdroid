@@ -72,9 +72,8 @@ class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
   (JNIEnv *env, jobject obj)
 {
-    bool returnValue = true;
     env->GetJavaVM(&gvm);
-    return (jboolean)returnValue;
+    return (jboolean)true;
 }
 
 JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPortStr
@@ -121,7 +120,20 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceive
     gvm->DetachCurrentThread();
 }
 
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortL
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_sendTouchEventsonMonoIPort
+  (JNIEnv *env, jobject obj, jstring cam, jint u, jint v, jdouble z)
+{
+    BufferedPort<Bottle> *MonoPortO= getHandle<BufferedPort<Bottle>  >(env, obj, "monoLeftHandle");
+    Bottle& MonoPortBottle = MonoPortO->prepare();
+    MonoPortBottle.clear();
+    MonoPortBottle.addString(env->GetStringUTFChars(cam, 0));
+    MonoPortBottle.addInt(u);
+    MonoPortBottle.addInt(v);
+    MonoPortBottle.addDouble(z);
+    MonoPortO -> write();
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortL
   (JNIEnv *env, jobject obj)
 {
     __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm creating the image port");
@@ -137,16 +149,55 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuffere
     if(!ImgPortL->open("/yarpdroid/imgL"))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening image port!");
+        delete ImgPortL;
+        ImgPortL = 0;
+        return (jboolean)false;
     }
 
     setHandle(env, obj, ImgPortL, "viewLeftHandle");
+    return (jboolean)true;
 }
 
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedImgPortL
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedImgPortL
   (JNIEnv *env, jobject obj)
 {
     __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm destroying the image port");
     BufferedPort<ImageOf<PixelRgb> >  *ImgPortL = getHandle<BufferedPort<ImageOf<PixelRgb> >  >(env, obj, "viewLeftHandle");
+    ImgPortL->close();
     delete ImgPortL;
     ImgPortL = 0;
+    return (jboolean)true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedMonoIPort
+  (JNIEnv *env, jobject obj)
+{
+    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm creating the mono port");
+    if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
+    }
+
+    BufferedPort<Bottle> *MonoPortO = new BufferedPort<Bottle>;
+    if(!MonoPortO->open("/yarpdroid/iKinGazeCtrl/mono:o"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening mono port!");
+        delete MonoPortO;
+        MonoPortO = 0;
+        return (jboolean)false;
+    }
+
+    setHandle(env, obj, MonoPortO, "monoLeftHandle");
+    return (jboolean)true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedMonoIPort
+  (JNIEnv *env, jobject obj)
+{
+    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm destroying the mono port");
+    BufferedPort<Bottle>  *MonoPortO= getHandle<BufferedPort<Bottle>  >(env, obj, "monoLeftHandle");
+    MonoPortO->close();
+    delete MonoPortO;
+    MonoPortO = 0;
+    return (jboolean)true;
 }

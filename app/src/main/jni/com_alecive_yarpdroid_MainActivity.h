@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     com_alecive_yarpdroid_MainActivity
  * Method:    initNetwork
- * Signature: ()Ljava/lang/String;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;I)Z
  */
-JNIEXPORT jstring JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
-  (JNIEnv *, jobject);
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
+  (JNIEnv *, jobject, jstring, jstring, jint);
 
 #ifdef __cplusplus
 }

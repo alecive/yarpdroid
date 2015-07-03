@@ -12,23 +12,21 @@
 
 using namespace yarp::os;
 
-JNIEXPORT jstring JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
-  (JNIEnv *env, jobject obj)
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
+  (JNIEnv *env, jobject obj, jstring _sn, jstring _h, jint _p)
 {
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
     {
-        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "[CheckNetwork()] Putenv failed %d", errno);
     }
 
     std::string s="Network configuration: ";
 
     Network yarp;
 
-    ConstString serverName = "/yarpdroid";
-//    ConstString host="192.168.1.5";
-    ConstString host="10.255.10.133";
-//    ConstString host="10.0.0.16";
-    int port=10000;
+    ConstString serverName = env->GetStringUTFChars(_sn, 0);
+    ConstString host       = env->GetStringUTFChars(_h, 0);
+    int port=_p;
     Contact server = Contact::byName(serverName);
     server.setHost(host);
     server.setPort(port);
@@ -39,16 +37,19 @@ JNIEXPORT jstring JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
     }
 
     s = Network::getNameServerName() + " " + host + ":" + int2string(port);
-
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "Checking network..");
     if (!yarp.checkNetwork())
     {
         s += " FALSE";
-        __android_log_write(ANDROID_LOG_WARN, LOG_TAG, "CheckNetwork was false");
+        __android_log_write(ANDROID_LOG_WARN, LOG_TAG, "CheckNetwork() was false");
+        return (jboolean)false;
     }
     else
     {
-        s += " TRUE";
+        __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "CheckNetwork() was true!");
+        return (jboolean)true;
     }
 
-    return env->NewStringUTF(s.c_str());
+//    return env->NewStringUTF(s.c_str());
+
 }

@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
     DrawerLayout mDrawerLayout;
 
+    String serverName = "/yarpdroid";
+    String host       = "192.168.1.9";
+    int    port       = 10000;
+
     private static final String TAG = "MainActivity";
 
     @Override
@@ -64,9 +68,8 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         setupDrawerLayout();
         Log.i(TAG,"AbsolutePath for creating files:"+getFilesDir().getAbsolutePath());
-        long threadId = Thread.currentThread().getId();
-        Log.i(TAG,"Thread # " + threadId + " is doing this task");
-//        initNetwork();
+//        long threadId = Thread.currentThread().getId();
+//        Log.i(TAG,"Thread # " + threadId + " is doing this task");
     }
 
     private void initToolbar() {
@@ -119,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
             case R.id.action_search:
-                Snackbar.make(mViewPager, initNetwork(), Snackbar.LENGTH_LONG).show();
+                String s = serverName + "@" + host + ":" + port +
+                           " " + initNetwork(serverName,host,port);
+                Snackbar.make(mViewPager, s, Snackbar.LENGTH_LONG).show();
                 return true;
         }
 
@@ -173,5 +178,5 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "yarpdroid C++ library loaded successfully");
     }
 
-    public native String initNetwork();
+    public native boolean initNetwork(String serverName, String host, int port);
 }
