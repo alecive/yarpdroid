@@ -1,14 +1,20 @@
 package com.alecive.yarpdroid;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -52,7 +58,7 @@ public class yarpviewFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        destroyBufferedImgPortL();
+//        destroyBufferedImgPortL();
         super.onDestroy();
     }
 
@@ -66,9 +72,9 @@ public class yarpviewFragment extends Fragment {
         imgRight = (ImageView) rootView.findViewById(R.id.imgRight);
 
         register();
-        createBufferedImgPortL();
-        destroyBufferedImgPortL();
-        createBufferedImgPortL();
+//        createBufferedImgPortL();
+//        destroyBufferedImgPortL();
+//        createBufferedImgPortL();
 
         return rootView;
     }
@@ -92,12 +98,17 @@ public class yarpviewFragment extends Fragment {
         int[] intArray = new int[data.length/3];
 
         for (int i=0; i<data.length/3; i++) {
-            intArray[i] = 0xff000000 |
-                    ((int)data[i*3] << 16) | ((int)data[i*3+1] << 8) | (int)data[i*3+2];
+            intArray[i] = 0xff000000                      | (((int)data[i*3] & 255) << 16) |
+                          (((int)data[i*3+1] & 255) << 8) | ((int)data[i*3+2] & 255);
         }
 
         final Bitmap bitmap = Bitmap.createBitmap(320,240, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(intArray,0,320,0,0,320,240);
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        final int height = displaymetrics.heightPixels;
+        final int width = displaymetrics.widthPixels;
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -107,10 +118,12 @@ public class yarpviewFragment extends Fragment {
                     Log.e(TAG,"Bitmap is NULL!");
                 }
                 else {
-                    view.setImageBitmap(bitmap);
+                    view.setImageBitmap(Bitmap.createScaledBitmap(bitmap,720,540,false));
                 }
             }
         });
+
+        Log.i(TAG, "setImageViewWithByteArray finished!" + width + " " + height);
 
 //        File photo = null;
 //

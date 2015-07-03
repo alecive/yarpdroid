@@ -28,7 +28,7 @@ class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
     int dataReceived;
 
     virtual void onRead(ImageOf<PixelRgb>& img) {
-        if(dataReceived%2==0)
+        if(dataReceived%1==0)
         {
             JavaVMAttachArgs args;
             args.version = JNI_VERSION_1_6; // choose your JNI version

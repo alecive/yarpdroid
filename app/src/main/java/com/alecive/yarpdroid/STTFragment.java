@@ -105,9 +105,9 @@ public class STTFragment extends Fragment {
         });
 
         register();
-        createBufferedPort();
-        destroyBufferedPort();
-        createBufferedPort();
+//        createBufferedPort();
+//        destroyBufferedPort();
+//        createBufferedPort();
 
         return rootView;
     }

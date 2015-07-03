@@ -24,9 +24,10 @@ JNIEXPORT jstring JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
 
     Network yarp;
 
-    ConstString serverName = "/icub04";
+    ConstString serverName = "/yarpdroid";
 //    ConstString host="192.168.1.5";
     ConstString host="10.255.10.133";
+//    ConstString host="10.0.0.16";
     int port=10000;
     Contact server = Contact::byName(serverName);
     server.setHost(host);
