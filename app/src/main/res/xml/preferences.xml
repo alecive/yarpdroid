@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference android:title="yarp namespace"
-        android:key="@string/yarp_namespace"
-        android:summary="@string/yarp_namespace"/>
-    <EditTextPreference android:title="yarpserver IP"
-        android:key="@string/yarp_server"
-        android:summary="@string/yarp_server"/>
-    <EditTextPreference android:title="yarpserver port"
-        android:key="@string/yarp_server_port"
-        android:summary="@string/yarp_server_port"/>
+
+    <PreferenceCategory android:title="@string/yarp_network_category" >
+        <EditTextPreference
+            android:title="yarp namespace"
+            android:summary="@string/yarp_namespace"
+            android:key="pref_yarp_namespace"
+            android:defaultValue="@string/yarp_namespace_default" />
+        <EditTextPreference
+            android:title="yarpserver IP"
+            android:summary="@string/yarp_server"
+            android:key="pref_yarp_server"
+            android:defaultValue="@string/yarp_server_default"/>
+        <EditTextPreference
+            android:title="yarpserver port"
+            android:summary="@string/yarp_server_port"
+            android:key="pref_yarp_server_port"
+            android:defaultValue="@string/yarp_server_port_default"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>

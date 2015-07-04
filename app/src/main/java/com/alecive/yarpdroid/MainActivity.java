@@ -1,7 +1,9 @@
 package com.alecive.yarpdroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -17,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -122,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
             case R.id.action_search:
+                setUserSettings();
                 String s = serverName + "@" + host + ":" + port +
                            " " + initNetwork(serverName,host,port);
                 Snackbar.make(mViewPager, s, Snackbar.LENGTH_LONG).show();
@@ -129,6 +133,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private String setUserSettings() {
+        SharedPreferences sharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        StringBuilder builder = new StringBuilder();
+
+        serverName = sharedPrefs.getString("pref_yarp_namespace", "NULL");
+        host       = sharedPrefs.getString("pref_yarp_server", "NULL");
+        port       = Integer.parseInt(sharedPrefs.getString("pref_yarp_server_port", "NULL"));
+
+        builder.append("Yarp Namespace Server: " + serverName);
+        builder.append("\t Yarp Server IP:" + host);
+        builder.append("\t Yarp Server Port: " + port);
+
+        return builder.toString();
     }
 
     public static class TabsPagerAdapter extends FragmentPagerAdapter {

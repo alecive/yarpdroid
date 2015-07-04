@@ -18,7 +18,11 @@
     <string name="drawer_close">Close</string>
     <string name="cam_left">Left Camera</string>
     <string name="cam_right">Right Camera</string>
-    <string name="yarp_namespace">/icub04</string>
-    <string name="yarp_server">10.255.10.133</string>
-    <string name="yarp_server_port">10000</string>
+    <string name="yarp_network_category">yarp Network Configuration</string>
+    <string name="yarp_namespace">Set the yarp namespace</string>
+    <string name="yarp_server">Set the IP of the yarp server</string>
+    <string name="yarp_server_port">Set the port of the yarp server</string>
+    <string name="yarp_namespace_default">/yarpdroid</string>
+    <string name="yarp_server_default">192.168.1.9</string>
+    <string name="yarp_server_port_default">10000</string>
 </resources>

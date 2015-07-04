@@ -36,8 +36,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
         __android_log_write(ANDROID_LOG_ERROR, LOG_TAG, "setNameServerContact returned false!");
     }
 
-    s = Network::getNameServerName() + " " + host + ":" + int2string(port);
-    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "Checking network..");
+    std::string net = Network::getNameServerName() + " " + host + ":" + int2string(port);
+    std::string result = "Checking network: " + net;
+    s = s + net;
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, result.c_str());
     if (!yarp.checkNetwork())
     {
         s += " FALSE";
