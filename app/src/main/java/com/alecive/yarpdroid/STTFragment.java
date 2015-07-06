@@ -104,6 +104,8 @@ public class STTFragment extends Fragment {
             }
         });
 
+        STTPortHandle=0;
+
         register();
         return rootView;
     }
@@ -152,13 +154,30 @@ public class STTFragment extends Fragment {
     }
 
     private void initNative() {
-        Log.i(TAG,"I'm opening the native port");
-        createBufferedPort();
+        Log.d(TAG,"I'm opening the native port");
+        if(!createBufferedPort()) {
+            createBufferedPort();
+        }
+
+        if (STTPortHandle!=0) {
+            String s="Native port has been successfully opened!";
+            Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
+            Log.i(TAG,s);
+        }
     }
 
     private void finiNative() {
-        Log.i(TAG,"I'm closing the native port");
-        destroyBufferedPort();
+        Log.d(TAG,"I'm closing the native port");
+        if (STTPortHandle!=0) {
+            if (destroyBufferedPort()) {
+                STTPortHandle=0;
+            }
+        }
+        else {
+            String s="The native port is not open or has been already closed";
+            Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG,s);
+        }
     }
 
     private static void staticTestMethod(String str)
@@ -168,14 +187,13 @@ public class STTFragment extends Fragment {
 
     private void nonStaticTestMethod(String str)
     {
-//        txtSpeechInput.setText(str);
         Log.i(TAG, str);
     }
 
     private        native boolean register();
     private        native void    getDataReceivedonPort(String textToSend);
     private static native void    testCallbackStatic();
-    private        native void    createBufferedPort();
+    private        native boolean createBufferedPort();
     private        native void    writeOntoBufferedPort(String textToSend);
-    private        native void    destroyBufferedPort();
+    private        native boolean destroyBufferedPort();
 }

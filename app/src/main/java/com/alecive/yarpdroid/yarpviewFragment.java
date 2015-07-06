@@ -1,5 +1,6 @@
 package com.alecive.yarpdroid;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -103,13 +104,17 @@ public class yarpviewFragment extends Fragment {
         screenHeight = displaymetrics.heightPixels;
         screenWidth  = displaymetrics.widthPixels;
 
+        viewLeftHandle=0;
+        monoLeftHandle=0;
+
         register();
 
         return rootView;
     }
 
     private void initNative() {
-        Log.i(TAG,"I'm opening the native ports");
+        Log.d(TAG,"I'm opening the native ports");
+
         if (!createBufferedImgPortL()) {
             createBufferedImgPortL();
         }
@@ -117,12 +122,38 @@ public class yarpviewFragment extends Fragment {
         if (!createBufferedMonoIPort()) {
             createBufferedMonoIPort();
         }
+
+        if (viewLeftHandle!=0 && monoLeftHandle!=0)
+        {
+            String s="Native ports have been successfully opened!";
+            Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
+            Log.i(TAG,s);
+        }
     }
 
     private void finiNative() {
-        Log.i(TAG,"I'm fining the native ports");
-        destroyBufferedImgPortL();
-        destroyBufferedMonoIPort();
+        Log.d(TAG,"I'm fining the native ports");
+        boolean isViewLeftOn=(viewLeftHandle!=0);
+        boolean isMonoLeftOn=(monoLeftHandle!=0);
+
+        if (!isViewLeftOn | !isMonoLeftOn) {
+            String s="One of the native ports (or more than one) is not open or has been already closed";
+            Snackbar.make(getView(), "WARN: " + s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG,s);
+        }
+
+        if (isViewLeftOn) {
+            if (destroyBufferedImgPortL()) {
+                viewLeftHandle=0;
+            }
+        }
+
+        if (isMonoLeftOn) {
+            if (destroyBufferedMonoIPort()) {
+                monoLeftHandle=0;
+            }
+        }
+
     }
 
     public static String getHexString(byte[] b) throws Exception {

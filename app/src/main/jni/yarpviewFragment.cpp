@@ -136,7 +136,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_sendTouch
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortL
   (JNIEnv *env, jobject obj)
 {
-    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm creating the image port");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the image port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
@@ -146,7 +146,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
     BufferedPort<ImageOf<PixelRgb> > *ImgPortL;
     ImgPortL = new BufferedPort<ImageOf<PixelRgb> >;
     ImgPortL->useCallback(*processor);
-    if(!ImgPortL->open("/yarpdroid/imgL"))
+    if(!ImgPortL->open("/yarpdroid/cam/left:i"))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening image port!");
         delete ImgPortL;
@@ -161,7 +161,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedImgPortL
   (JNIEnv *env, jobject obj)
 {
-    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm destroying the image port");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the image port");
     BufferedPort<ImageOf<PixelRgb> >  *ImgPortL = getHandle<BufferedPort<ImageOf<PixelRgb> >  >(env, obj, "viewLeftHandle");
     ImgPortL->close();
     delete ImgPortL;
@@ -172,7 +172,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBu
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedMonoIPort
   (JNIEnv *env, jobject obj)
 {
-    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm creating the mono port");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the mono port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
@@ -194,7 +194,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedMonoIPort
   (JNIEnv *env, jobject obj)
 {
-    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm destroying the mono port");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the mono port");
     BufferedPort<Bottle>  *MonoPortO= getHandle<BufferedPort<Bottle>  >(env, obj, "monoLeftHandle");
     MonoPortO->close();
     delete MonoPortO;

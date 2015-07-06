@@ -95,10 +95,10 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_testCallbackStatic
     env->CallStaticVoidMethod(cls, methodid, jstr);
 }
 
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_createBufferedPort
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBufferedPort
   (JNIEnv *env, jobject obj)
 {
-    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm creating the buffered port");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the buffered port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
@@ -108,12 +108,16 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_createBufferedPort
     BufferedPort<Bottle> *STTPort;
     STTPort = new BufferedPort<Bottle>;
     STTPort->useCallback(*processor);
-    if(!STTPort->open("/yarpdroid/STT"))
+    if(!STTPort->open("/yarpdroid/STT:o"))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
+        delete STTPort;
+        STTPort = 0;
+        return (jboolean)false;
     }
 
     setHandle(env, obj, STTPort, "STTPortHandle");
+    return (jboolean)true;
 }
 
 JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_writeOntoBufferedPort
@@ -126,11 +130,13 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_writeOntoBufferedP
     STTPort -> write();
 }
 
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_destroyBufferedPort
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_destroyBufferedPort
   (JNIEnv *env, jobject obj)
 {
-    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "I'm destroying the buffered port");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the buffered port");
     BufferedPort<Bottle>  *STTPort = getHandle<BufferedPort<Bottle>  >(env, obj, "STTPortHandle");
+    STTPort->close();
     delete STTPort;
     STTPort = 0;
+    return (jboolean)true;
 }

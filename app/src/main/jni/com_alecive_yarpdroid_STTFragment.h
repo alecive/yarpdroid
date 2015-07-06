@@ -34,9 +34,9 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_testCallbackStatic
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
  * Method:    createBufferedPort
- * Signature: ()V
+ * Signature: ()Z
  */
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_createBufferedPort
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBufferedPort
   (JNIEnv *, jobject);
 
 /*
@@ -50,9 +50,9 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_writeOntoBufferedP
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
  * Method:    destroyBufferedPort
- * Signature: ()V
+ * Signature: ()Z
  */
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_destroyBufferedPort
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_destroyBufferedPort
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus
