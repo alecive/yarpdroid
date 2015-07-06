@@ -114,6 +114,7 @@ public class STTFragment extends Fragment {
      * Showing google speech input dialog
      */
     private void promptSpeechInput() {
+        initNative();
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -154,6 +155,13 @@ public class STTFragment extends Fragment {
     }
 
     private void initNative() {
+        if (STTPortHandle!=0) {
+            String s="Native port has been already opened!";
+            Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG,s);
+            return;
+        }
+
         Log.d(TAG,"I'm opening the native port");
         if(!createBufferedPort()) {
             createBufferedPort();
@@ -162,7 +170,7 @@ public class STTFragment extends Fragment {
         if (STTPortHandle!=0) {
             String s="Native port has been successfully opened!";
             Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
-            Log.i(TAG,s);
+            Log.i(TAG, s);
         }
     }
 

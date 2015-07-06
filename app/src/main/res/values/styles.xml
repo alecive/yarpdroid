@@ -10,7 +10,7 @@
     </style>
 
     <style name="PreferencesTheme"
-        parent="@style/Theme.AppCompat.Light">
+        parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
 
         <!-- Support library compatibility -->

@@ -56,7 +56,7 @@ public class yarpviewFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-//        destroyBufferedImgPortL();
+        finiNative();
         super.onDestroy();
     }
 
@@ -113,8 +113,14 @@ public class yarpviewFragment extends Fragment {
     }
 
     private void initNative() {
-        Log.d(TAG,"I'm opening the native ports");
+        if (viewLeftHandle!=0 | monoLeftHandle!=0) {
+            String s="Native ports have been already opened!";
+            Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG,s);
+            return;
+        }
 
+        Log.d(TAG,"I'm opening the native ports");
         if (!createBufferedImgPortL()) {
             createBufferedImgPortL();
         }

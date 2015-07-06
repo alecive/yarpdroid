@@ -12,39 +12,43 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/action_open_port"
-        android:textSize="24sp"
-        android:textColor="@color/white"
-        android:id="@+id/btnInitNative"
-        android:background="@color/button_color_2"
-        android:elevation="16dp"
-        android:padding="20dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="24dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="24dp"
-        android:layout_width="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/btnFiniNative" />
+        android:id="@+id/linearLayout">
 
-    <Button
-        android:layout_height="wrap_content"
-        android:text="@string/action_close_port"
-        android:textSize="24sp"
-        android:textColor="@color/white"
-        android:id="@+id/btnFiniNative"
-        android:background="@color/button_color_2"
-        android:elevation="16dp"
-        android:padding="20dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="24dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="24dp"
-        android:layout_width="wrap_content"
-        android:layout_alignTop="@+id/btnInitNative"
-        android:layout_toRightOf="@+id/imgLeft"
-        android:layout_alignParentRight="true" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_open_port"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:id="@+id/btnInitNative"
+            android:background="@color/button_color_2"
+            android:elevation="16dp"
+            android:padding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="24dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="24dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_close_port"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:id="@+id/btnFiniNative"
+            android:background="@color/button_color_2"
+            android:elevation="16dp"
+            android:padding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="24dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="24dp" />
+
+    </LinearLayout>
 </RelativeLayout>

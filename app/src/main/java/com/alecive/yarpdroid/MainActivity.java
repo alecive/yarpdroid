@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -114,11 +113,7 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId()) {
-            case R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_settings:
             case R.id.action_preferences:
                 Intent i = new Intent(this, PreferencesActivity.class);
@@ -133,6 +128,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        mDrawerLayout.openDrawer(GravityCompat.START);
+        return true;
     }
 
     private String setUserSettings() {
