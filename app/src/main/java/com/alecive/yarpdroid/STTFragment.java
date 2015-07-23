@@ -119,14 +119,14 @@ public class STTFragment extends Fragment {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                getString(R.string.speech_prompt));
+//        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+//                getString(R.string.speech_prompt));
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
-            Toast.makeText(getActivity().getApplicationContext(),
-                    getString(R.string.speech_not_supported),
-                    Toast.LENGTH_SHORT).show();
+            String s=getString(R.string.speech_not_supported);
+            Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG, s);
         }
     }
 

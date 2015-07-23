@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1: // Fragment # 1 - This will show YarpviewFragment
                     return yarpviewFragment.newInstance(position + 1);
                 case 2: // Fragment # 1 - This will show SecondFragment
-                    return jointsFragment.newInstance(position + 1);
+                    return demoCTPFragment.newInstance(position + 1);
                 default:
                     return null;
             }
