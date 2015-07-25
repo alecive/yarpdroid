@@ -21,7 +21,7 @@
         <activity
             android:name="com.alecive.yarpdroid.PreferencesActivity"
             android:screenOrientation="portrait"
-            android:label="@string/action_preferences"
+            android:label="@string/action_settings"
             android:theme="@style/PreferencesTheme"/>
     </application>
 

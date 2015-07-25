@@ -9,11 +9,51 @@ extern "C" {
 #endif
 /*
  * Class:     com_alecive_yarpdroid_MainActivity
+ * Method:    register
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_register
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_MainActivity
  * Method:    initNetwork
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
   (JNIEnv *, jobject, jstring, jstring, jint);
+
+/*
+ * Class:     com_alecive_yarpdroid_MainActivity
+ * Method:    createBufferedPort
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_createBufferedPort
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_MainActivity
+ * Method:    connectStopPort
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_connectStopPort
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_alecive_yarpdroid_MainActivity
+ * Method:    writeStopMsg
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_writeStopMsg
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_MainActivity
+ * Method:    destroyBufferedPort
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_destroyBufferedPort
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

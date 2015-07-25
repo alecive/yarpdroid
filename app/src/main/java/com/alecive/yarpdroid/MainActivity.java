@@ -2,6 +2,7 @@ package com.alecive.yarpdroid;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -19,9 +20,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
+import java.lang.Thread;
 import java.util.Locale;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    boolean initNetworkResult;
+
+    private long stopPortHandle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +79,17 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG,"AbsolutePath for creating files:"+getFilesDir().getAbsolutePath());
 //        long threadId = Thread.currentThread().getId();
 //        Log.i(TAG,"Thread # " + threadId + " is doing this task");
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getResources().getColor(R.color.statusbar_background));
+        }
+
+        stopPortHandle =0;
+        register();
+        initNetworkResult = false;
     }
 
     private void initToolbar() {
@@ -115,19 +133,61 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
-            case R.id.action_preferences:
                 Intent i = new Intent(this, PreferencesActivity.class);
                 startActivity(i);
                 return true;
             case R.id.action_search:
                 setUserSettings();
+                long threadId = Thread.currentThread().getId();
+                Log.d(TAG, "Thread # " + threadId + " is doing this task");
+
+                networkInitializer netIni = new networkInitializer();
+                Thread iniNet = new Thread (netIni);
+                iniNet.start();
+                try {
+                    iniNet.join(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (iniNet.isAlive()) {
+                    // If the thread is still alive, it is still blocked on the method call
+                    // So let's try stopping it
+                    iniNet.interrupt();
+                } else {
+                    // The thread is finished, get the result
+                    initNetworkResult = netIni.getIniNetRes();
+                }
                 String s = serverName + "@" + host + ":" + port +
-                           " " + initNetwork(serverName,host,port);
+                        " " + initNetworkResult;
                 Snackbar.make(mViewPager, s, Snackbar.LENGTH_LONG).show();
                 return true;
+            case R.id.action_stop_now:
+                String portToConnectTo = "/iolStateMachineHandler/motor_stop:i";
+                boolean result = actionStopNow(portToConnectTo);
+                Snackbar.make(mViewPager, "Emergency command on " +
+                        portToConnectTo + "; result: " + result, Snackbar.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class networkInitializer implements Runnable {
+        private boolean iniNetRes;
+
+        public networkInitializer() { iniNetRes = false;}
+        public void run() {
+            long threadId = Thread.currentThread().getId();
+            Log.d(TAG, "Thread # " + threadId + " is doing this task");
+            try {
+                iniNetRes = initNetwork(serverName,host,port);
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                Log.w(TAG,"initNetwork probably got stuck. Interrupting corresponding thread.");
+            }
+        }
+        public boolean getIniNetRes() {
+            return iniNetRes;
+        }
     }
 
     @Override
@@ -153,7 +213,52 @@ public class MainActivity extends AppCompatActivity {
         return builder.toString();
     }
 
-    public static class TabsPagerAdapter extends FragmentPagerAdapter {
+    private boolean actionStopNow(String portToConnectTo) {
+        boolean res = true;
+        initNative();
+        if (!connectStopPort(portToConnectTo)) {
+            connectStopPort(portToConnectTo);
+        }
+        res = res & writeStopMsg();
+        finiNative();
+        return res;
+    }
+
+    private void initNative() {
+        if (stopPortHandle!=0) {
+            String s="Native port has been already opened!";
+            Snackbar.make(mViewPager, "WARN: "+s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG,s);
+            return;
+        }
+
+        Log.d(TAG,"I'm opening the native port");
+        if(!createBufferedPort()) {
+            createBufferedPort();
+        }
+
+        if (stopPortHandle!=0) {
+            String s="Native port has been successfully opened!";
+            Snackbar.make(mViewPager, s, Snackbar.LENGTH_LONG).show();
+            Log.i(TAG, s);
+        }
+    }
+
+    private void finiNative() {
+        Log.d(TAG,"I'm closing the native port");
+        if (stopPortHandle!=0) {
+            if (destroyBufferedPort()) {
+                stopPortHandle=0;
+            }
+        }
+        else {
+            String s="The native port is not open or has been already closed";
+            Snackbar.make(mViewPager, "WARN: "+s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG, s);
+        }
+    }
+
+    public class TabsPagerAdapter extends FragmentPagerAdapter {
 
         public TabsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -174,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
                     return null;
             }
         }
+
         @Override
         public int getCount() {
             // get item count - equal to number of tabs
@@ -185,11 +291,14 @@ public class MainActivity extends AppCompatActivity {
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return "STT".toUpperCase(l);
+                    String s1 = getString(R.string.title_section1);
+                    return s1.toUpperCase(l);
                 case 1:
-                    return "view".toUpperCase(l);
+                    String s2 = getString(R.string.title_section2);
+                    return s2.toUpperCase(l);
                 case 2:
-                    return "joints".toUpperCase(l);
+                    String s3 = getString(R.string.title_section3);
+                    return s3.toUpperCase(l);
             }
             return null;
         }
@@ -200,5 +309,11 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "yarpdroid C++ library loaded successfully");
     }
 
-    public native boolean initNetwork(String serverName, String host, int port);
+    private native boolean register();
+    public  native boolean initNetwork(String serverName, String host, int port);
+
+    private native boolean createBufferedPort();
+    private native boolean connectStopPort(String portToConnectTo);
+    private native boolean writeStopMsg();
+    private native boolean destroyBufferedPort();
 }

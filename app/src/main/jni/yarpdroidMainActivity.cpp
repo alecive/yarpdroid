@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <sstream>
 #include <android/log.h>
+#include <yarp/os/Bottle.h>
+#include <yarp/os/BufferedPort.h>
 #include <yarp/os/Network.h>
 
 #include "com_alecive_yarpdroid_MainActivity.h"
@@ -11,6 +13,8 @@
 #define LOG_TAG "com.alecive.yarpdroid.MainActivity C++"
 
 using namespace yarp::os;
+
+JavaVM   *javavm;
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
   (JNIEnv *env, jobject obj, jstring _sn, jstring _h, jint _p)
@@ -51,7 +55,76 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_initNetwork
         __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "CheckNetwork() was true!");
         return (jboolean)true;
     }
+}
 
-//    return env->NewStringUTF(s.c_str());
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_register (JNIEnv *env, jobject obj)
+{
+    bool returnValue = true;
+    env->GetJavaVM(&javavm);
+    return (jboolean)returnValue;
+}
 
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_createBufferedPort
+        (JNIEnv *env, jobject obj)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the buffered port");
+    if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
+    }
+    
+    BufferedPort<Bottle> *stopPort;
+    stopPort = new BufferedPort<Bottle>;
+    
+    if(!stopPort->open("/yarpdroid/motor_stop:o"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
+        delete stopPort;
+        stopPort = 0;
+        return (jboolean)false;
+    }
+
+    setHandle(env, obj, stopPort, "stopPortHandle");
+    return (jboolean)true;
+}
+
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_connectStopPort
+        (JNIEnv *env, jobject obj, jstring str)
+{
+    std::string port = env->GetStringUTFChars(str, 0);
+    std::string txt  = "I'm going to send an emergency command on " + port;
+    __android_log_print(ANDROID_LOG_WARN, LOG_TAG, txt.c_str());
+    
+    if(!Network::connect(port.c_str(),"/yarpdroid/motor_stop:o"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in connecting to the remote!");
+        return (jboolean)false;
+    }
+    
+    return (jboolean)true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_writeStopMsg
+(JNIEnv *env, jobject obj)
+{    
+    BufferedPort<Bottle>  *stopPort = getHandle<BufferedPort<Bottle>  >(env, obj, "stopPortHandle");
+    Bottle& stopBottle = stopPort->prepare();
+    stopBottle.clear();
+    stopBottle.addString("icub-stop-now");
+    stopBottle.addDouble(0.9);
+    stopPort -> write();
+    
+    return (jboolean)true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_destroyBufferedPort
+        (JNIEnv *env, jobject obj)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the buffered port");
+    BufferedPort<Bottle>  *stopPort = getHandle<BufferedPort<Bottle>  >(env, obj, "stopPortHandle");
+    stopPort->close();
+    delete stopPort;
+    stopPort = 0;
+    return (jboolean)true;
 }
