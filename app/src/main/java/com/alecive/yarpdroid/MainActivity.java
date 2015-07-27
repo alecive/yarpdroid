@@ -90,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         stopPortHandle =0;
         register();
         initNetworkResult = false;
+
+//        This command hides the ActionBar
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.hide();
     }
 
     private void initToolbar() {
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_preferences:
                 Intent i = new Intent(this, PreferencesActivity.class);
                 startActivity(i);
                 return true;
@@ -144,11 +148,13 @@ public class MainActivity extends AppCompatActivity {
                 networkInitializer netIni = new networkInitializer();
                 Thread iniNet = new Thread (netIni);
                 iniNet.start();
+
                 try {
                     iniNet.join(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 if (iniNet.isAlive()) {
                     // If the thread is still alive, it is still blocked on the method call
                     // So let's try stopping it
@@ -157,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     // The thread is finished, get the result
                     initNetworkResult = netIni.getIniNetRes();
                 }
+
                 String s = serverName + "@" + host + ":" + port +
                         " " + initNetworkResult;
                 Snackbar.make(mViewPager, s, Snackbar.LENGTH_LONG).show();
@@ -182,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 iniNetRes = initNetwork(serverName,host,port);
                 Thread.sleep(1);
             } catch (InterruptedException e) {
-                Log.w(TAG,"initNetwork probably got stuck. Interrupting corresponding thread.");
+                Log.e(TAG,"initNetwork probably got stuck. Interrupting corresponding thread.");
             }
         }
         public boolean getIniNetRes() {
