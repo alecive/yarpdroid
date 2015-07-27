@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 Thread iniNet = new Thread (netIni);
                 iniNet.start();
                 try {
-                    iniNet.join(3000);
+                    iniNet.join(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -216,9 +216,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean actionStopNow(String portToConnectTo) {
         boolean res = true;
         initNative();
-        if (!connectStopPort(portToConnectTo)) {
-            connectStopPort(portToConnectTo);
-        }
+        res = res & connectStopPort(portToConnectTo);
         res = res & writeStopMsg();
         finiNative();
         return res;

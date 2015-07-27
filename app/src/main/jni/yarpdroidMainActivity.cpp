@@ -96,7 +96,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_MainActivity_connectStopPo
     std::string txt  = "I'm going to send an emergency command on " + port;
     __android_log_print(ANDROID_LOG_WARN, LOG_TAG, txt.c_str());
     
-    if(!Network::connect(port.c_str(),"/yarpdroid/motor_stop:o"))
+    if(!Network::connect("/yarpdroid/motor_stop:o", port.c_str()))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in connecting to the remote!");
         return (jboolean)false;
