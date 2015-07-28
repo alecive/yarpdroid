@@ -13,10 +13,16 @@
     <string name="description">_</string>
     <string name="title_section1">STT</string>
     <string name="title_section2">view</string>
-    <string name="title_section3">DemoCTP</string>
+    <string name="title_section3">Camera</string>
+    <string name="title_section4">DemoCTP</string>
     <string name="action_1">Action 1</string>
     <string name="action_2">Action 2</string>
     <string name="action_3">Action 3</string>
+    <string name="hello">Hello World, PhotoIntentActivity!</string>
+    <string name="btnIntend">Take Picture</string>
+    <string name="btnIntendV">Take Video</string>
+    <string name="cannot">Cannot</string>
+    <string name="album_name">YARPdroid</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="cam_left">Left Camera</string>

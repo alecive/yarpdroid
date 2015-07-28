@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:id="@+id/linearLayout3"
+        android:layout_weight="200">
+
+        <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:visibility="visible"
+            android:id="@+id/imageView1" />
+        <VideoView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:visibility="invisible"
+            android:id="@+id/videoView1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout2"
+        android:id="@+id/linearLayout">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_open_port"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:id="@+id/btnInitNative"
+            android:background="@color/button_color_2"
+            android:elevation="16dp"
+            android:padding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="24dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="24dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_close_port"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:id="@+id/btnFiniNative"
+            android:background="@color/button_color_2"
+            android:elevation="16dp"
+            android:padding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="24dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="24dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/linearLayout2"
+        android:layout_alignParentBottom="true"
+        >
+        <Button android:text="@string/btnIntend" android:id="@+id/btnIntend"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:background="@color/button_color"
+            android:elevation="16dp"
+            android:padding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="24dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="24dp" />
+
+        <Button android:text="@string/btnIntendV" android:id="@+id/btnIntendV"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:background="@color/button_color"
+            android:elevation="16dp"
+            android:padding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="24dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="24dp" />
+    </LinearLayout>
+</LinearLayout>

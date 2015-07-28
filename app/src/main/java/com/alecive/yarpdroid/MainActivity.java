@@ -278,7 +278,9 @@ public class MainActivity extends AppCompatActivity {
                     return STTFragment.newInstance(position + 1);
                 case 1: // Fragment # 1 - This will show YarpviewFragment
                     return yarpviewFragment.newInstance(position + 1);
-                case 2: // Fragment # 1 - This will show SecondFragment
+                case 2: // Fragment # 2 - This will show the CameraFragment
+                    return cameraIntentFragment.newInstance(position + 1);
+                case 3: // Fragment # 3 - This will show the demoCTPFragment
                     return demoCTPFragment.newInstance(position + 1);
                 default:
                     return null;
@@ -288,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // get item count - equal to number of tabs
-            return 3;
+            return 4;
         }
 
         @Override
@@ -304,6 +306,9 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     String s3 = getString(R.string.title_section3);
                     return s3.toUpperCase(l);
+                case 3:
+                    String s4 = getString(R.string.title_section4);
+                    return s4.toUpperCase(l);
             }
             return null;
         }
