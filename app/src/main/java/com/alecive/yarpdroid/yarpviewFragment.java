@@ -249,8 +249,6 @@ public class yarpviewFragment extends Fragment {
 
     private native boolean createBufferedImgPortL();
     private native boolean destroyBufferedImgPortL();
-    private native void    getImgReceivedonPort(byte[] img);
-    private native void    getImgReceivedonPortStr(String imgStr);
 
     private native boolean createBufferedMonoIPort();
     private native boolean destroyBufferedMonoIPort();

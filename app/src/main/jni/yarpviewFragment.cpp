@@ -20,7 +20,12 @@
 using namespace yarp::sig;
 using namespace yarp::os;
 
-JavaVM   *gvm;
+JavaVM   *gvm=NULL;
+
+static jclass  javaCls;
+static jobject javaObj;
+
+jmethodID     method_setImgLeft;
 
 class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
     JNIEnv *env;
@@ -30,6 +35,7 @@ class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
     virtual void onRead(ImageOf<PixelRgb>& img) {
         if(dataReceived%1==0)
         {
+            __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "test");
             JavaVMAttachArgs args;
             args.version = JNI_VERSION_1_6; // choose your JNI version
             args.name = NULL; // you might want to give the java thread a name
@@ -37,32 +43,55 @@ class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
             gvm->AttachCurrentThread(&env, &args);
 
             unsigned char *imgRaw = img.getRawImage();
-//            std::string imstr(reinterpret_cast<char*>(imgRaw));
-//            jstring imgStr = env->NewStringUTF(imstr.c_str());
+            // std::string imstr(reinterpret_cast<char*>(imgRaw));
+            // jstring imgStr = env->NewStringUTF(imstr.c_str());
+
             jbyteArray imgByte=as_byte_array(env,imgRaw,img.getRawImageSize());
-                std::stringstream s;
-                s << "DATA RECEIVED! Size of the imgRaw: " << sizeof(imgRaw) << " " << img.getRawImageSize()
-                  << " Img size:" << img.width() << "x" << img.height();
-                __android_log_print(ANDROID_LOG_INFO, LOG_TAG, s.str().c_str());
-//            std::stringstream ss;
-//            ss << std::hex << std::setfill('0');
-//            for (int i=0;i<img.getRawImageSize();i++)
-//            {
-//                ss << std::setw(2) << static_cast<unsigned>(imgRaw[i]);
-//            }
-//            __android_log_print(ANDROID_LOG_WARN, LOG_TAG, ss.str().c_str());
+            std::stringstream s;
+            s << "DATA RECEIVED! Size of the imgRaw: " << sizeof(imgRaw) << " " << img.getRawImageSize()
+              << " Img size:" << img.width() << "x" << img.height();
+            __android_log_print(ANDROID_LOG_INFO, LOG_TAG, s.str().c_str());
 
-//            std::ofstream out;
-//            out.open ("/sdcard/CiveTest/imgOrig.ppm", std::ios::out | std::ios::binary);
-//            out<< "P6\n" << img.width() << " " << img.height() <<"\n255\n";
-//            out.write (reinterpret_cast<char*>(imgRaw), img.getRawImageSize());
-//            out.close ();
+            // std::stringstream ss;
+            // ss << std::hex << std::setfill('0');
+            // for (int i=0;i<img.getRawImageSize();i++)
+            // {
+            //     ss << std::setw(2) << static_cast<unsigned>(imgRaw[i]);
+            // }
+            // __android_log_print(ANDROID_LOG_WARN, LOG_TAG, ss.str().c_str());
 
-            Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPort(env, obj, imgByte);
+            // std::ofstream out;
+            // out.open ("/sdcard/CiveTest/imgOrig.ppm", std::ios::out | std::ios::binary);
+            // out<< "P6\n" << img.width() << " " << img.height() <<"\n255\n";
+            // out.write (reinterpret_cast<char*>(imgRaw), img.getRawImageSize());
+            // out.close ();
 
+            getImgReceivedonPort(imgByte);
+            // env->DeleteLocalRef(imgByte);
             gvm->DetachCurrentThread();
         }
         dataReceived++;
+    }
+
+    void getImgReceivedonPort (jbyteArray img)
+    {
+        JavaVMAttachArgs args;
+        args.version = JNI_VERSION_1_6; // choose your JNI version
+        args.name = NULL; // you might want to give the java thread a name
+        args.group = NULL; // you might want to assign the java thread to a ThreadGroup
+        gvm->AttachCurrentThread(&env, &args);
+
+        // jmethodID method=env->GetMethodID(javaCls, "setImgLeft", "([B)V");
+
+        if(env->ExceptionCheck()) {
+            env->ExceptionDescribe();
+            env->ExceptionClear();
+            return;
+        }
+
+        env->CallVoidMethod(obj, method_setImgLeft, img);
+        gvm->DetachCurrentThread();
+        __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "getImgReceivedonPort finished");
     }
 
     public:
@@ -73,57 +102,20 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
   (JNIEnv *env, jobject obj)
 {
     env->GetJavaVM(&gvm);
+    javaObj = env->NewGlobalRef(obj);
+    jclass tmp = env->GetObjectClass(javaObj);
+    javaCls = (jclass)env->NewGlobalRef(tmp);
+
+    method_setImgLeft=env->GetMethodID(javaCls, "setImgLeft", "([B)V");
+
     return (jboolean)true;
-}
-
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPortStr
-  (JNIEnv *env, jobject obj, jstring imgStr)
-{
-    JavaVMAttachArgs args;
-    args.version = JNI_VERSION_1_6; // choose your JNI version
-    args.name = NULL; // you might want to give the java thread a name
-    args.group = NULL; // you might want to assign the java thread to a ThreadGroup
-    gvm->AttachCurrentThread(&env, &args);
-
-    jclass cls=env->GetObjectClass(obj);
-    jmethodID method=env->GetMethodID(cls, "setImgLeft", "(Ljava/lang/String;)V");
-
-    if(env->ExceptionCheck()) {
-        env->ExceptionDescribe();
-        env->ExceptionClear();
-        return;
-    }
-
-    env->CallVoidMethod(obj, method, imgStr);
-    gvm->DetachCurrentThread();
-}
-
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getImgReceivedonPort
-  (JNIEnv *env, jobject obj, jbyteArray img)
-{
-    JavaVMAttachArgs args;
-    args.version = JNI_VERSION_1_6; // choose your JNI version
-    args.name = NULL; // you might want to give the java thread a name
-    args.group = NULL; // you might want to assign the java thread to a ThreadGroup
-    gvm->AttachCurrentThread(&env, &args);
-
-    jclass cls=env->GetObjectClass(obj);
-    jmethodID method=env->GetMethodID(cls, "setImgLeft", "([B)V");
-
-    if(env->ExceptionCheck()) {
-        env->ExceptionDescribe();
-        env->ExceptionClear();
-        return;
-    }
-
-    env->CallVoidMethod(obj, method, img);
-    gvm->DetachCurrentThread();
 }
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_sendTouchEventsonMonoIPort
   (JNIEnv *env, jobject obj, jstring cam, jint u, jint v, jdouble z)
 {
-    BufferedPort<Bottle> *MonoPortO= getHandle<BufferedPort<Bottle>  >(env, obj, "monoLeftHandle");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "TEST");
+    BufferedPort<Bottle> *MonoPortO= getHandle<BufferedPort<Bottle>  >(env, javaObj, "monoLeftHandle");
     Bottle& MonoPortBottle = MonoPortO->prepare();
     MonoPortBottle.clear();
     MonoPortBottle.addString(env->GetStringUTFChars(cam, 0));
@@ -142,7 +134,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
     }
 
-    DataProcessorImg* processor = new DataProcessorImg(env, obj);
+    DataProcessorImg* processor = new DataProcessorImg(env, javaObj);
     BufferedPort<ImageOf<PixelRgb> > *ImgPortL;
     ImgPortL = new BufferedPort<ImageOf<PixelRgb> >;
     ImgPortL->useCallback(*processor);
@@ -154,7 +146,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
         return (jboolean)false;
     }
 
-    setHandle(env, obj, ImgPortL, "viewLeftHandle");
+    setHandle(env, javaObj, ImgPortL, "viewLeftHandle");
     return (jboolean)true;
 }
 
@@ -162,7 +154,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBu
   (JNIEnv *env, jobject obj)
 {
     __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the image port");
-    BufferedPort<ImageOf<PixelRgb> >  *ImgPortL = getHandle<BufferedPort<ImageOf<PixelRgb> >  >(env, obj, "viewLeftHandle");
+    BufferedPort<ImageOf<PixelRgb> >  *ImgPortL = getHandle<BufferedPort<ImageOf<PixelRgb> >  >(env, javaObj, "viewLeftHandle");
     ImgPortL->close();
     delete ImgPortL;
     ImgPortL = 0;
@@ -187,7 +179,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
         return (jboolean)false;
     }
 
-    setHandle(env, obj, MonoPortO, "monoLeftHandle");
+    setHandle(env, javaObj, MonoPortO, "monoLeftHandle");
     return (jboolean)true;
 }
 
