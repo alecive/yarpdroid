@@ -64,6 +64,8 @@ public class cameraIntentFragment extends Fragment {
 
     private long cameraIntentHandle;
 
+    private static String applicationName = "/yarpdroid";
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -74,12 +76,17 @@ public class cameraIntentFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static cameraIntentFragment newInstance(int sectionNumber) {
+    public static cameraIntentFragment newInstance(int sectionNumber, String _applicationName) {
         cameraIntentFragment fragment = new cameraIntentFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
+        fragment.setApplicationName(_applicationName);
         return fragment;
+    }
+
+    public void setApplicationName(String _applicationName) {
+        applicationName = _applicationName;
     }
 
     /** Called when the fragment is first created. */

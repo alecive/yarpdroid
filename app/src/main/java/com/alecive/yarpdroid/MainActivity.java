@@ -48,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
     DrawerLayout mDrawerLayout;
 
-    String serverName = "/yarpdroid";
-    String host       = "192.168.1.9";
-    int    port       = 10000;
+    String serverName      = "/yarpdroid";
+    String host            = "192.168.1.9";
+    int    port            = 10000;
+    String applicationName = "/yarpdroid";
 
     private static final String TAG = "MainActivity";
 
@@ -209,9 +210,10 @@ public class MainActivity extends AppCompatActivity {
 
         StringBuilder builder = new StringBuilder();
 
-        serverName = sharedPrefs.getString("pref_yarp_namespace", "NULL");
-        host       = sharedPrefs.getString("pref_yarp_server", "NULL");
-        port       = Integer.parseInt(sharedPrefs.getString("pref_yarp_server_port", "NULL"));
+        serverName      = sharedPrefs.getString("pref_yarp_namespace", "NULL");
+        host            = sharedPrefs.getString("pref_yarp_server", "NULL");
+        port            = Integer.parseInt(sharedPrefs.getString("pref_yarp_server_port", "NULL"));
+        applicationName = sharedPrefs.getString("pref_yarp_application_name", "NULL");
 
         builder.append("Yarp Namespace Server: " + serverName);
         builder.append("\t Yarp Server IP:" + host);
@@ -275,13 +277,13 @@ public class MainActivity extends AppCompatActivity {
             // Return a STTFragment (defined as a static inner class below).
             switch (position) {
                 case 0: // Fragment # 0 - This will show STTFragment
-                    return STTFragment.newInstance(position + 1);
+                    return STTFragment.newInstance(position + 1, applicationName);
                 case 1: // Fragment # 1 - This will show YarpviewFragment
-                    return yarpviewFragment.newInstance(position + 1);
+                    return yarpviewFragment.newInstance(position + 1, applicationName);
                 case 2: // Fragment # 2 - This will show the CameraFragment
-                    return cameraIntentFragment.newInstance(position + 1);
+                    return cameraIntentFragment.newInstance(position + 1, applicationName);
                 case 3: // Fragment # 3 - This will show the demoCTPFragment
-                    return demoCTPFragment.newInstance(position + 1);
+                    return demoCTPFragment.newInstance(position + 1, applicationName);
                 default:
                     return null;
             }

@@ -30,16 +30,23 @@ public class demoCTPFragment extends Fragment {
     private long demoCTPPortHandle;
     private long demoCTPRPCHandle;
 
+    private static String applicationName = "/yarpdroid";
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static demoCTPFragment newInstance(int sectionNumber) {
+    public static demoCTPFragment newInstance(int sectionNumber, String _applicationName) {
         demoCTPFragment fragment = new demoCTPFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
+        fragment.setApplicationName(_applicationName);
         return fragment;
+    }
+
+    public void setApplicationName(String _applicationName) {
+        applicationName = _applicationName;
     }
 
     @Override

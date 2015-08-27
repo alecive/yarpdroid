@@ -15,10 +15,9 @@
     <string name="title_section2">view</string>
     <string name="title_section3">Camera</string>
     <string name="title_section4">DemoCTP</string>
-    <string name="action_1">Action 1</string>
-    <string name="action_2">Action 2</string>
-    <string name="action_3">Action 3</string>
-    <string name="hello">Hello World, PhotoIntentActivity!</string>
+    <string name="action_1">Action 1 ("start")</string>
+    <string name="action_2">Action 2 ("stop")</string>
+    <string name="action_3">Action 3 ("home")</string>
     <string name="btnIntend">Take Picture</string>
     <string name="btnIntendV">Take Video</string>
     <string name="cannot">Cannot</string>
@@ -34,4 +33,6 @@
     <string name="yarp_namespace_default">/yarpdroid</string>
     <string name="yarp_server_default">192.168.1.9</string>
     <string name="yarp_server_port_default">10000</string>
+    <string name="yarp_application_name">Set the name of the application (which will be used as prefix for the port names). Remember to put a slash (/) in the beginning otherwise it will not work</string>
+    <string name="yarp_application_name_default">/yarpdroid</string>
 </resources>

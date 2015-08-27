@@ -31,23 +31,28 @@ public class yarpviewFragment extends Fragment {
     private int screenHeight;
     private int screenWidth;
 
+    private static String applicationName = "/yarpdroid";
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public static yarpviewFragment newInstance(int sectionNumber) {
+    public static yarpviewFragment newInstance(int sectionNumber, String _applicationName) {
         yarpviewFragment fragment = new yarpviewFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
+        fragment.setApplicationName(_applicationName);
         return fragment;
     }
 
-    public yarpviewFragment() {
-
+    public void setApplicationName(String _applicationName) {
+        applicationName = _applicationName;
     }
+
+    public yarpviewFragment() {  }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

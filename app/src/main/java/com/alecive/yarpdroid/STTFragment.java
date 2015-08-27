@@ -38,6 +38,8 @@ public class STTFragment extends Fragment {
 
     private long STTPortHandle;
 
+    private static String applicationName = "/yarpdroid";
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -48,12 +50,17 @@ public class STTFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static STTFragment newInstance(int sectionNumber) {
+    public static STTFragment newInstance(int sectionNumber, String _applicationName) {
         STTFragment fragment = new STTFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
+        fragment.setApplicationName(_applicationName);
         return fragment;
+    }
+
+    public void setApplicationName(String _applicationName) {
+        applicationName = _applicationName;
     }
 
     public STTFragment() {

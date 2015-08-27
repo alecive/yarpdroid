@@ -17,6 +17,11 @@
             android:summary="@string/yarp_server_port"
             android:key="pref_yarp_server_port"
             android:defaultValue="@string/yarp_server_port_default"/>
+        <EditTextPreference
+            android:title="application name"
+            android:summary="@string/yarp_application_name"
+            android:key="pref_yarp_application_name"
+            android:defaultValue="@string/yarp_application_name_default"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
