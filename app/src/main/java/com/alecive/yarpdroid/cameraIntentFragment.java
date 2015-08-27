@@ -2,12 +2,14 @@ package com.alecive.yarpdroid;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.graphics.Matrix;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -52,10 +54,15 @@ public class cameraIntentFragment extends Fragment {
 
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
+    private Button btnInitNative;
+    private Button btnFiniNative;
+    
     private int screenHeight;
     private int screenWidth;
 
     private static final String TAG = "cameraIntentFragment";
+
+    private long cameraIntentHandle;
 
     /**
      * The fragment argument representing the section number for this
@@ -106,6 +113,23 @@ public class cameraIntentFragment extends Fragment {
                 MediaStore.ACTION_VIDEO_CAPTURE
         );
 
+        btnInitNative = (Button) rootView.findViewById(R.id.btnInitNative);
+        btnInitNative.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                initNative();
+            }
+        });
+        btnFiniNative = (Button) rootView.findViewById(R.id.btnFiniNative);
+        btnFiniNative.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finiNative();
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
         } else {
@@ -118,6 +142,41 @@ public class cameraIntentFragment extends Fragment {
         screenWidth  = displaymetrics.widthPixels;
 
         return rootView;
+    }
+
+
+    private void initNative() {
+        if (cameraIntentHandle!=0) {
+            String s="Native port has been already opened!";
+            Snackbar.make(getView(), "WARN: " + s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG,s);
+            return;
+        }
+
+        Log.d(TAG,"I'm opening the native port");
+        if(!createBufferedPort()) {
+            createBufferedPort();
+        }
+
+        if (cameraIntentHandle!=0) {
+            String s="Native port has been successfully opened!";
+            Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
+            Log.i(TAG, s);
+        }
+    }
+
+    private void finiNative() {
+        Log.d(TAG,"I'm closing the native port");
+        if (cameraIntentHandle!=0) {
+            if (destroyBufferedPort()) {
+                cameraIntentHandle=0;
+            }
+        }
+        else {
+            String s="The native port is not open or has been already closed";
+            Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+            Log.w(TAG,s);
+        }
     }
 
     /* Photo album for this application */
@@ -180,7 +239,7 @@ public class cameraIntentFragment extends Fragment {
         BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
-		
+
 		/* Figure out which way needs to be reduced less */
         int scaleFactor = 1;
         if ((targetW > 0) || (targetH > 0)) {
@@ -193,19 +252,40 @@ public class cameraIntentFragment extends Fragment {
         bmOptions.inPurgeable = true;
 
 		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-
+        Log.e(TAG, "DEBUG0");
+        // Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath), 100, 100, true);
+        Log.e(TAG,"DEBUG1");
         // TODO theoretically this should be replaced by a proper reading of the Exif data
         // because this would not work 100% of the times.
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        Log.e(TAG,"I am writing onto the port..");
+        if (cameraIntentHandle!=0) {
+
+           int bytes = rotatedBitmap.getByteCount(); // Calculate how many bytes our image consists of.
+
+            ByteBuffer buffer = ByteBuffer.allocate(bytes); // Create a new buffer
+            rotatedBitmap.copyPixelsToBuffer(buffer); // Move the byte data to the buffer
+
+            byte[] array = buffer.array(); // Get the underlying array containing the data.
+
+            Log.w(TAG,"I am writing onto the port..");
+            writeOntoBufferedPort(array);
+            return;
+        }
 		
 		/* Associate the Bitmap to the ImageView */
         mImageView.setImageBitmap(rotatedBitmap);
         mVideoUri = null;
         mImageView.setVisibility(View.VISIBLE);
         mVideoView.setVisibility(View.INVISIBLE);
+
+        bitmap.recycle();
+        bitmap = null;
+        rotatedBitmap.recycle();
+        rotatedBitmap = null;
     }
 
     private void galleryAddPic() {
@@ -420,4 +500,8 @@ public class cameraIntentFragment extends Fragment {
             );
         }
     }
+
+    private        native boolean createBufferedPort();
+    private        native void    writeOntoBufferedPort(byte[] data);
+    private        native boolean destroyBufferedPort();
 }

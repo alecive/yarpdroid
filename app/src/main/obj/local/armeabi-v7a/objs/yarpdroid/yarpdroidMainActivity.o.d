@@ -39,6 +39,7 @@ obj/local/armeabi-v7a/objs/yarpdroid/yarpdroidMainActivity.o: \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/ContactStyle.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Property.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/NameStore.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/QosStyle.h \
  jni/com_alecive_yarpdroid_MainActivity.h \
  /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h \
  jni/handle.h
@@ -120,6 +121,8 @@ obj/local/armeabi-v7a/objs/yarpdroid/yarpdroidMainActivity.o: \
 /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Property.h:
 
 /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/NameStore.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/QosStyle.h:
 
 jni/com_alecive_yarpdroid_MainActivity.h:
 

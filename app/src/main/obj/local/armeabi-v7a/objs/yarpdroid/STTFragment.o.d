@@ -40,7 +40,12 @@ obj/local/armeabi-v7a/objs/yarpdroid/STTFragment.o: jni/STTFragment.cpp \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib \
  jni/com_alecive_yarpdroid_STTFragment.h \
  /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h \
- jni/handle.h
+ jni/handle.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Network.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/ContactStyle.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Property.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/NameStore.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/QosStyle.h
 
 /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/string:
 
@@ -125,3 +130,13 @@ jni/com_alecive_yarpdroid_STTFragment.h:
 /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h:
 
 jni/handle.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Network.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/ContactStyle.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Property.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/NameStore.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/QosStyle.h:
