@@ -76,6 +76,7 @@ public class demoCTPFragment extends Fragment {
             }
         });
 
+        btnAction3 = (Button) rootView.findViewById(R.id.btnAction3);
         btnAction3.setOnClickListener(new View.OnClickListener() {
 
             @Override
