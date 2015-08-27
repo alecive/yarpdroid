@@ -18,10 +18,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_register
 /*
  * Class:     com_alecive_yarpdroid_demoCTPFragment
  * Method:    createBufferedPort
- * Signature: ()Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createBufferedPort
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_demoCTPFragment
@@ -42,18 +42,18 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_destroyBuf
 /*
  * Class:     com_alecive_yarpdroid_demoCTPFragment
  * Method:    createRPCPort
- * Signature: ()Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createRPCPort
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_demoCTPFragment
  * Method:    sendRPCAction
- * Signature: (I)Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_sendRPCAction
-  (JNIEnv *, jobject, jstring );
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_demoCTPFragment

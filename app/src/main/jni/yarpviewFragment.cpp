@@ -126,7 +126,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_sendTouch
 }
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortL
-  (JNIEnv *env, jobject obj)
+  (JNIEnv *env, jobject obj, jstring _applicationName)
 {
     __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the image port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
@@ -138,7 +138,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
     BufferedPort<ImageOf<PixelRgb> > *ImgPortL;
     ImgPortL = new BufferedPort<ImageOf<PixelRgb> >;
     ImgPortL->useCallback(*processor);
-    if(!ImgPortL->open("/yarpdroid/cam/left:i"))
+
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/cam/left:i";
+    if(!ImgPortL->open(portName.c_str()))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening image port!");
         delete ImgPortL;
@@ -162,7 +165,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBu
 }
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedMonoIPort
-  (JNIEnv *env, jobject obj)
+  (JNIEnv *env, jobject obj, jstring _applicationName)
 {
     __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the mono port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
@@ -171,7 +174,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBuf
     }
 
     BufferedPort<Bottle> *MonoPortO = new BufferedPort<Bottle>;
-    if(!MonoPortO->open("/yarpdroid/iKinGazeCtrl/mono:o"))
+
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/iKinGazeCtrl/mono:o";
+    if(!MonoPortO->open(portName.c_str()))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening mono port!");
         delete MonoPortO;

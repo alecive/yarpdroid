@@ -28,7 +28,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_register (
 }
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createBufferedPort
-  (JNIEnv *env, jobject obj)
+  (JNIEnv *env, jobject obj, jstring _applicationName)
 {
     __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the buffered port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
@@ -39,7 +39,9 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createBuff
     BufferedPort<Bottle> *demoCTPPort;
     demoCTPPort = new BufferedPort<Bottle>;
 
-    if(!demoCTPPort->open("/yarpdroid/demoCTP:o"))
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/demoCTP:o";
+    if(!demoCTPPort->open(portName.c_str()))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
         delete demoCTPPort;
@@ -75,7 +77,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_destroyBuf
 }
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createRPCPort
-        (JNIEnv *env, jobject obj)
+        (JNIEnv *env, jobject obj, jstring _applicationName)
 {
     __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the buffered port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
@@ -86,7 +88,9 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createRPCP
     RpcClient *demoCTPRPC;
     demoCTPRPC = new RpcClient;
 
-    if(!demoCTPRPC->open("/yarpdroid/rpc:o"))
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/rpc:o";
+    if(!demoCTPRPC->open(portName.c_str()))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening rpc port!");
         delete demoCTPRPC;

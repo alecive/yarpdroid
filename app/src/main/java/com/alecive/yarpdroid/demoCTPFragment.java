@@ -131,8 +131,8 @@ public class demoCTPFragment extends Fragment {
             }
 
             Log.d(TAG, "I'm opening the native port");
-            if(!createRPCPort()) {
-                createRPCPort();
+            if(!createRPCPort(applicationName)) {
+                createRPCPort(applicationName);
             }
 
             if (demoCTPRPCHandle!=0) {
@@ -150,8 +150,8 @@ public class demoCTPFragment extends Fragment {
             }
 
             Log.d(TAG, "I'm opening the native port");
-            if(!createBufferedPort()) {
-                createBufferedPort();
+            if(!createBufferedPort(applicationName)) {
+                createBufferedPort(applicationName);
             }
 
             if (demoCTPPortHandle!=0) {
@@ -193,11 +193,11 @@ public class demoCTPFragment extends Fragment {
 
     private native boolean register();
 
-    private native boolean createBufferedPort();
+    private native boolean createBufferedPort(String _applicationName);
     private native boolean sendAction(int action);
     private native boolean destroyBufferedPort();
 
-    private native boolean createRPCPort();
+    private native boolean createRPCPort(String _applicationName);
     private native boolean sendRPCAction(String message);
     private native boolean destroyRPCPort();
 }

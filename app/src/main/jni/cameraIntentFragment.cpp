@@ -17,7 +17,7 @@
 using namespace yarp::os;
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_cameraIntentFragment_createBufferedPort
-  (JNIEnv *env, jobject obj)
+  (JNIEnv *env, jobject obj, jstring _applicationName)
 {
     __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the buffered port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
@@ -27,7 +27,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_cameraIntentFragment_creat
 
     BufferedPort<ManagedBytes> *cameraPort;
     cameraPort = new BufferedPort<ManagedBytes>;
-    if(!cameraPort->open("/yarpdroid/camera:o"))
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/camera:o";
+
+    if(!cameraPort->open(portName.c_str()))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
         delete cameraPort;

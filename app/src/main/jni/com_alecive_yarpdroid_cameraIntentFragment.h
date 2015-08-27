@@ -16,10 +16,10 @@ extern "C" {
 /*
  * Class:     com_alecive_yarpdroid_cameraIntentFragment
  * Method:    createBufferedPort
- * Signature: ()Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_cameraIntentFragment_createBufferedPort
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_cameraIntentFragment

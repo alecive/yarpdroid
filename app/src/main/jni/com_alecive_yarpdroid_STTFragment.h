@@ -17,14 +17,6 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_register
 
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
- * Method:    getDataReceivedonPort
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_getDataReceivedonPort
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     com_alecive_yarpdroid_STTFragment
  * Method:    testCallbackStatic
  * Signature: ()V
  */
@@ -34,10 +26,10 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_testCallbackStatic
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
  * Method:    createBufferedPort
- * Signature: ()Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBufferedPort
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_STTFragment
@@ -45,6 +37,14 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBuffered
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_writeOntoBufferedPort
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_alecive_yarpdroid_STTFragment
+ * Method:    getDataReceivedonPort
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_getDataReceivedonPort
   (JNIEnv *, jobject, jstring);
 
 /*

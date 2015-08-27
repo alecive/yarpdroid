@@ -169,9 +169,9 @@ public class STTFragment extends Fragment {
             return;
         }
 
-        Log.d(TAG,"I'm opening the native port");
-        if(!createBufferedPort()) {
-            createBufferedPort();
+        Log.d(TAG, "I'm opening the native port");
+        if(!createBufferedPort(applicationName)) {
+            createBufferedPort(applicationName);
         }
 
         if (STTPortHandle!=0) {
@@ -191,7 +191,7 @@ public class STTFragment extends Fragment {
         else {
             String s="The native port is not open or has been already closed";
             Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
-            Log.w(TAG,s);
+            Log.w(TAG, s);
         }
     }
 
@@ -206,9 +206,9 @@ public class STTFragment extends Fragment {
     }
 
     private        native boolean register();
-    private        native void    getDataReceivedonPort(String textToSend);
     private static native void    testCallbackStatic();
-    private        native boolean createBufferedPort();
+    private        native boolean createBufferedPort(String _applicationName);
     private        native void    writeOntoBufferedPort(String textToSend);
+    private        native void    getDataReceivedonPort(String textToSend);
     private        native boolean destroyBufferedPort();
 }

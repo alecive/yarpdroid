@@ -18,10 +18,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
  * Method:    createBufferedImgPortL
- * Signature: ()Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedImgPortL
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
@@ -34,10 +34,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBu
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment
  * Method:    createBufferedMonoIPort
- * Signature: ()Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedMonoIPort
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alecive_yarpdroid_yarpviewFragment

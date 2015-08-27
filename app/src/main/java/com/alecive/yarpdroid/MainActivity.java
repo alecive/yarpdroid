@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         register();
         initNetworkResult = false;
 
+        Log.d(TAG, "Setting User Settings: " + setUserSettings());
+
 //        This command hides the ActionBar
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.hide();
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
             case R.id.action_search:
-                setUserSettings();
+                Log.d(TAG, setUserSettings());
                 long threadId = Thread.currentThread().getId();
                 Log.d(TAG, "Thread # " + threadId + " is doing this task");
 
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         builder.append("Yarp Namespace Server: " + serverName);
         builder.append("\t Yarp Server IP:" + host);
         builder.append("\t Yarp Server Port: " + port);
+        builder.append("\t Application Name: " + applicationName);
 
         return builder.toString();
     }
@@ -275,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a STTFragment (defined as a static inner class below).
+            Log.d(TAG,"Application Name:" + applicationName);
             switch (position) {
                 case 0: // Fragment # 0 - This will show STTFragment
                     return STTFragment.newInstance(position + 1, applicationName);

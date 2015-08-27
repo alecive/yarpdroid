@@ -161,8 +161,8 @@ public class cameraIntentFragment extends Fragment {
         }
 
         Log.d(TAG,"I'm opening the native port");
-        if(!createBufferedPort()) {
-            createBufferedPort();
+        if(!createBufferedPort(applicationName)) {
+            createBufferedPort(applicationName);
         }
 
         if (cameraIntentHandle!=0) {
@@ -508,7 +508,7 @@ public class cameraIntentFragment extends Fragment {
         }
     }
 
-    private        native boolean createBufferedPort();
+    private        native boolean createBufferedPort(String _applicationName);
     private        native void    writeOntoBufferedPort(byte[] data);
     private        native boolean destroyBufferedPort();
 }

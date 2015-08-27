@@ -126,12 +126,12 @@ public class yarpviewFragment extends Fragment {
         }
 
         Log.d(TAG,"I'm opening the native ports");
-        if (!createBufferedImgPortL()) {
-            createBufferedImgPortL();
+        if (!createBufferedImgPortL(applicationName)) {
+            createBufferedImgPortL(applicationName);
         }
 
-        if (!createBufferedMonoIPort()) {
-            createBufferedMonoIPort();
+        if (!createBufferedMonoIPort(applicationName)) {
+            createBufferedMonoIPort(applicationName);
         }
 
         if (viewLeftHandle!=0 && monoLeftHandle!=0)
@@ -252,10 +252,10 @@ public class yarpviewFragment extends Fragment {
 
     private native boolean register();
 
-    private native boolean createBufferedImgPortL();
+    private native boolean createBufferedImgPortL(String _applicationName);
     private native boolean destroyBufferedImgPortL();
 
-    private native boolean createBufferedMonoIPort();
+    private native boolean createBufferedMonoIPort(String _applicationName);
     private native boolean destroyBufferedMonoIPort();
     private native boolean sendTouchEventsonMonoIPort(String cam, int u, int v, double z);
 }

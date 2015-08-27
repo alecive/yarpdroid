@@ -97,7 +97,7 @@ JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_STTFragment_testCallbackStatic
 }
 
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBufferedPort
-  (JNIEnv *env, jobject obj)
+  (JNIEnv *env, jobject obj, jstring _applicationName)
 {
     __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the buffered port");
     if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
@@ -109,7 +109,10 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBuffered
     BufferedPort<Bottle> *STTPort;
     STTPort = new BufferedPort<Bottle>;
     STTPort->useCallback(*processor);
-    if(!STTPort->open("/yarpdroid/STT:o"))
+
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/STT:o";
+    if(!STTPort->open(portName.c_str()))
     {
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
         delete STTPort;
