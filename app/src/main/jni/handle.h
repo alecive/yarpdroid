@@ -23,6 +23,7 @@ void setHandle(JNIEnv *env, jobject obj, T *t, std::string str)
 
 std::string int2string ( int num );
 
-jbyteArray as_byte_array(JNIEnv *env, unsigned char* buf, int len);
+jbyteArray     as_byte_array(JNIEnv *env, unsigned char* buf, int len);
+unsigned char* as_unsigned_char_array(JNIEnv *env, jbyteArray array);
 
 #endif
