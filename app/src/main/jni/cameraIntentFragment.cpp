@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <yarp/os/Bottle.h>
 #include <yarp/os/BufferedPort.h>
-#include <yarp/os/Network.h>
 #include <yarp/os/Time.h>
 #include <yarp/os/impl/NameConfig.h>
 #include <android/log.h>
@@ -115,11 +114,6 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBuffered
         delete STTPort;
         STTPort = 0;
         return (jboolean)false;
-    }
-
-    if(!Network::connect("/yarpdroid/STT:o", "/IOL/speechRecog"))
-    {
-        __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "Error in connecting STT to the remote");
     }
 
     setHandle(env, obj, STTPort, "STTPortHandle");
