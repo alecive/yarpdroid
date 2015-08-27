@@ -18,6 +18,9 @@ public class demoCTPFragment extends Fragment {
     private static final String TAG = "demoCTPFragment";
     private static final String ARG_SECTION_NUMBER = "section_number";
 
+    private static final String COMMUNICATION = "RPC";
+    // private static final String COMMUNICATION = "BUFFERED_PORT";
+
     private Button btnAction1;
     private Button btnAction2;
     private Button btnAction3;
@@ -25,6 +28,7 @@ public class demoCTPFragment extends Fragment {
     private Button btnFiniNative;
 
     private long demoCTPPortHandle;
+    private long demoCTPRPCHandle;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -49,7 +53,12 @@ public class demoCTPFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                sendAction(1);
+                if (COMMUNICATION=="RPC") {
+                    sendRPCAction("start");
+                }
+                else if (COMMUNICATION=="BUFFERED_PORT") {
+                    sendAction(1);
+                }
             }
         });
 
@@ -58,16 +67,25 @@ public class demoCTPFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                sendAction(2);
+                if (COMMUNICATION=="RPC") {
+                    sendRPCAction("stop");
+                }
+                else if (COMMUNICATION=="BUFFERED_PORT") {
+                    sendAction(2);
+                }
             }
         });
 
-        btnAction3 = (Button) rootView.findViewById(R.id.btnAction3);
         btnAction3.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                sendAction(3);
+                if (COMMUNICATION=="RPC") {
+                    sendRPCAction("home");
+                }
+                else if (COMMUNICATION=="BUFFERED_PORT") {
+                    sendAction(3);
+                }
             }
         });
 
@@ -89,48 +107,89 @@ public class demoCTPFragment extends Fragment {
         });
 
         demoCTPPortHandle=0;
+        demoCTPRPCHandle=0;
 
         register();
         return rootView;
     }
 
     private void initNative() {
-        if (demoCTPPortHandle!=0) {
-            String s="Native port has been already opened!";
-            Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
-            Log.w(TAG,s);
-            return;
-        }
+        if (COMMUNICATION=="RPC") {
+            if (demoCTPRPCHandle!=0) {
+                String s="RPC port has been already opened!";
+                Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+                Log.w(TAG,s);
+                return;
+            }
 
-        Log.d(TAG, "I'm opening the native port");
-        if(!createBufferedPort()) {
-            createBufferedPort();
-        }
+            Log.d(TAG, "I'm opening the native port");
+            if(!createRPCPort()) {
+                createRPCPort();
+            }
 
-        if (demoCTPPortHandle!=0) {
-            String s="Native port has been successfully opened!";
-            Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
-            Log.i(TAG, s);
+            if (demoCTPRPCHandle!=0) {
+                String s="RPC port has been successfully opened!";
+                Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
+                Log.i(TAG, s);
+            }
+        }
+        else if (COMMUNICATION=="BUFFERED_PORT") {
+            if (demoCTPPortHandle!=0) {
+                String s="Native port has been already opened!";
+                Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+                Log.w(TAG,s);
+                return;
+            }
+
+            Log.d(TAG, "I'm opening the native port");
+            if(!createBufferedPort()) {
+                createBufferedPort();
+            }
+
+            if (demoCTPPortHandle!=0) {
+                String s="Native port has been successfully opened!";
+                Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
+                Log.i(TAG, s);
+            }
         }
     }
 
     private void finiNative() {
-        Log.d(TAG,"I'm closing the native port");
-        if (demoCTPPortHandle!=0) {
-            if (destroyBufferedPort()) {
-                demoCTPPortHandle=0;
+        if (COMMUNICATION=="RPC") {
+            Log.d(TAG, "I'm closing the rpc port");
+            if (demoCTPRPCHandle!=0) {
+                if (destroyRPCPort()) {
+                    demoCTPRPCHandle=0;
+                }
+            }
+            else {
+                String s="The rpc port is not open or has been already closed";
+                Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+                Log.w(TAG, s);
             }
         }
-        else {
-            String s="The native port is not open or has been already closed";
-            Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
-            Log.w(TAG,s);
+        else if (COMMUNICATION=="BUFFERED_PORT") {
+            Log.d(TAG, "I'm closing the native port");
+            if (demoCTPPortHandle!=0) {
+                if (destroyBufferedPort()) {
+                    demoCTPPortHandle=0;
+                }
+            }
+            else {
+                String s="The native port is not open or has been already closed";
+                Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
+                Log.w(TAG, s);
+            }
         }
     }
 
     private native boolean register();
 
-    private native boolean sendAction(int action);
     private native boolean createBufferedPort();
+    private native boolean sendAction(int action);
     private native boolean destroyBufferedPort();
+
+    private native boolean createRPCPort();
+    private native boolean sendRPCAction(String message);
+    private native boolean destroyRPCPort();
 }

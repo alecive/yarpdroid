@@ -36,6 +36,8 @@ obj/local/armeabi-v7a/objs/yarpdroid/demoCTPFragment.o: \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/Clock.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/impl/NameConfig.h \
  /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/impl/String.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/RpcClient.h \
+ /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/AbstractContactable.h \
  /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/android/log.h \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cerrno \
  /home/alecive/Programmazione/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib \
@@ -114,6 +116,10 @@ obj/local/armeabi-v7a/objs/yarpdroid/demoCTPFragment.o: \
 /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/impl/NameConfig.h:
 
 /home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/impl/String.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/RpcClient.h:
+
+/home/alecive/Programmazione/yarp/src/libYARP_OS/include/yarp/os/AbstractContactable.h:
 
 /home/alecive/Programmazione/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/android/log.h:
 
