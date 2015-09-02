@@ -35,7 +35,6 @@ class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
     virtual void onRead(ImageOf<PixelRgb>& img) {
         if(dataReceived%1==0)
         {
-            __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "test");
             JavaVMAttachArgs args;
             args.version = JNI_VERSION_1_6; // choose your JNI version
             args.name = NULL; // you might want to give the java thread a name

@@ -114,7 +114,7 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_STTFragment_createBuffered
     portName = portName + "/STT:o";
     if(!STTPort->open(portName.c_str()))
     {
-        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port named %s",portName.c_str());
         delete STTPort;
         STTPort = 0;
         return (jboolean)false;
