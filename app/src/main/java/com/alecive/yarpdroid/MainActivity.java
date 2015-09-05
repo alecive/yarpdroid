@@ -207,17 +207,17 @@ public class MainActivity extends AppCompatActivity {
                 .getDefaultSharedPreferences(this);
 
         StringBuilder builder = new StringBuilder();
-        Log.e(TAG,"TEST1");
+
         serverName      = sharedPrefs.getString("pref_yarp_namespace", "/yarpdroid");
         host            = sharedPrefs.getString("pref_yarp_server", "192.168.1.9");
         port            = Integer.parseInt(sharedPrefs.getString("pref_yarp_server_port", "10000"));
         applicationName = sharedPrefs.getString("pref_yarp_application_name", "/yarpdroid");
-        Log.e(TAG,"TEST1");
+
         builder.append("Yarp Namespace Server: " + serverName);
         builder.append("\t Yarp Server IP:" + host);
         builder.append("\t Yarp Server Port: " + port);
         builder.append("\t Application Name: " + applicationName);
-        Log.e(TAG, "TEST1");
+
         return builder.toString();
     }
 
