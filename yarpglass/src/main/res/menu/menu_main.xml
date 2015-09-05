@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:context="example.yarpglass.MainActivity">
+    <item android:id="@+id/action_start_sensor" android:title="Start Sensor"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_stop_sensor" android:title="Stop Sensor"
+        android:orderInCategory="100" android:showAsAction="never" />
+</menu>

@@ -63,6 +63,29 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_sendRPCAct
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_destroyRPCPort
   (JNIEnv *, jobject);
 
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    writeOntoBufferedPort
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_writeOntoBufferedMobilePort
+  (JNIEnv *, jobject, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble, jstring);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    createBufferedMonoIPort
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createBufferedMobileSensorDataPort
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    destroyBufferedMonoIPort
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_destroyBufferedMobileSensorDataPort
+  (JNIEnv *, jobject);
 #ifdef __cplusplus
 }
 #endif

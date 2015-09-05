@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">YarpGlass</string>
+    <string name="title_activity_main">YarpGlass</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="yarpglass">Yarp Glass</string>
+
+
+</resources>

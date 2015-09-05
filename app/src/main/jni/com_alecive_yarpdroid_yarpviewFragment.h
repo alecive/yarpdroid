@@ -55,6 +55,37 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBu
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_sendTouchEventsonMonoIPort
   (JNIEnv *, jobject, jstring, jint, jint, jdouble);
 
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    writeOntoBufferedPort
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_writeOntoBufferedGlassPort
+  (JNIEnv *, jobject, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    createBufferedMonoIPort
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedGlassSensorDataPort
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_alecive_yarpdroid_yarpviewFragment
+ * Method:    destroyBufferedMonoIPort
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedGlassSensorDataPort
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_alecive_yarpdroid_STTFragment
+ * Method:    getDataReceivedonPort
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getDataReceivedonPort
+  (JNIEnv *, jobject, jstring);
 #ifdef __cplusplus
 }
 #endif

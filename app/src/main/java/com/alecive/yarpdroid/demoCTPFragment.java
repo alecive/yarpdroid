@@ -1,14 +1,16 @@
 package com.alecive.yarpdroid;
 
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ToggleButton;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by alecive on 29/06/15. This is the third tab
@@ -30,7 +32,18 @@ public class demoCTPFragment extends Fragment {
     private long demoCTPPortHandle;
     private long demoCTPRPCHandle;
 
+    private AllSensorManager allSensorManager;
+    private Timer timer;
+    private TimerTask timerTask;
+    private Button btnStartSensor;
+    private Button btnStopSensor;
+    private ToggleButton toggleButtonMovementType;
+
+    private long mobileSensorPortHandle;
     private static String applicationName = "/yarpdroid";
+    private boolean requiresOrientationCalibrationOffset;
+    private float[] orientationOffsets;
+    private int sensorCount;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -116,8 +129,73 @@ public class demoCTPFragment extends Fragment {
 
         demoCTPPortHandle=0;
         demoCTPRPCHandle=0;
+        mobileSensorPortHandle = 0;
+
+        requiresOrientationCalibrationOffset = true;
+        orientationOffsets = new float[3];
 
         register();
+        allSensorManager = new AllSensorManager(getActivity(), 10);
+
+        btnStartSensor = (Button) rootView.findViewById(R.id.btnStartSensor);
+        btnStartSensor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sensorCount = 0;
+
+                timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        sensorCount++;
+                        float[] data = allSensorManager.getOrientationDataAsFloats();
+
+//                        data[6] = (float)Math.toRadians(data[6]);
+//                        data[7] = (float)Math.toRadians(data[7]);
+//                        data[8] = (float)Math.toRadians(data[8]);
+
+                        // subtracts away the orientation offset to align with the robot to (0,0,0)
+                        if (requiresOrientationCalibrationOffset) {
+                            requiresOrientationCalibrationOffset = false;
+                            orientationOffsets[0] = data[6];
+                            orientationOffsets[1] = data[7];
+                            orientationOffsets[2] = data[8];
+                            Log.d("demoCTPFragmentmobile", "Offset: "+data[6] + " " + data[7] + " " + data[8]);
+
+                        }
+                        data[6] = data[6] - orientationOffsets[0];
+                        data[7] = data[7] - orientationOffsets[1];
+                        data[8] = data[8] - orientationOffsets[2];
+
+                        String movementType;
+                        if (toggleButtonMovementType.isChecked()) {
+                            movementType = "position";
+                        } else {
+                            movementType = "orientation";
+                        }
+                        Log.d("demoCTPFragmentmobile", data[6] + " " + data[7] + " " + data[8]);
+//                        writeOntoBufferedMobilePort(data[0], data[1], data[2], data[3], data[4], data[5], data[7], data[6], data[8], movementType);
+                }
+                };
+
+                timer = new Timer();
+                timer.scheduleAtFixedRate(timerTask, 1, 100);
+                Toast.makeText(getActivity(), "Phone sensor started", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnStopSensor = (Button) rootView.findViewById(R.id.btnStopSensor);
+        btnStopSensor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                timer.cancel();
+                timerTask.cancel();
+                requiresOrientationCalibrationOffset = true;
+                Toast.makeText(getActivity(), "Phone sensor stopped", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        toggleButtonMovementType = (ToggleButton) rootView.findViewById(R.id.toggleButtonMovementType);
         return rootView;
     }
 
@@ -135,11 +213,16 @@ public class demoCTPFragment extends Fragment {
                 createRPCPort(applicationName);
             }
 
-            if (demoCTPRPCHandle!=0) {
+            if (!createBufferedMobileSensorDataPort(applicationName)) {
+                createBufferedMobileSensorDataPort(applicationName);
+            }
+
+            if (demoCTPRPCHandle!=0 && mobileSensorPortHandle != 0) {
                 String s="RPC port has been successfully opened!";
                 Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
                 Log.i(TAG, s);
             }
+            allSensorManager.registerOrientationSensors();
         }
         else if (COMMUNICATION=="BUFFERED_PORT") {
             if (demoCTPPortHandle!=0) {
@@ -165,9 +248,13 @@ public class demoCTPFragment extends Fragment {
     private void finiNative() {
         if (COMMUNICATION=="RPC") {
             Log.d(TAG, "I'm closing the rpc port");
-            if (demoCTPRPCHandle!=0) {
+            if (demoCTPRPCHandle!=0 | mobileSensorPortHandle != 0) {
                 if (destroyRPCPort()) {
                     demoCTPRPCHandle=0;
+                }
+
+                if (destroyBufferedMobileSensorDataPort()) {
+                    mobileSensorPortHandle =0;
                 }
             }
             else {
@@ -175,6 +262,7 @@ public class demoCTPFragment extends Fragment {
                 Snackbar.make(getView(), "WARN: "+s, Snackbar.LENGTH_LONG).show();
                 Log.w(TAG, s);
             }
+            allSensorManager.unregisterOrientationSensors();
         }
         else if (COMMUNICATION=="BUFFERED_PORT") {
             Log.d(TAG, "I'm closing the native port");
@@ -200,4 +288,10 @@ public class demoCTPFragment extends Fragment {
     private native boolean createRPCPort(String _applicationName);
     private native boolean sendRPCAction(String message);
     private native boolean destroyRPCPort();
+    private native boolean createBufferedMobileSensorDataPort(String _applicationName);
+    private native boolean destroyBufferedMobileSensorDataPort();
+    private native void    writeOntoBufferedMobilePort(double accelerometer1, double accelerometer2, double accelerometer3,
+                                                       double gyroscope1, double gyroscope2, double gyroscope3,
+                                                       double orientation1, double orientation2, double orientation3,
+                                                       String movementType);
 }

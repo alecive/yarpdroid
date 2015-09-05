@@ -97,6 +97,74 @@ class DataProcessorImg : public TypedReaderCallback<ImageOf<PixelRgb> > {
         DataProcessorImg(JNIEnv *_env, jobject _obj): env(_env), obj(_obj), dataReceived(0) {};
 };
 
+class GlassDataProcessor : public TypedReaderCallback<Bottle> {
+    JNIEnv *env;
+    jobject obj;
+
+    virtual void onRead(Bottle& b) {
+        __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "DATA RECEIVED!");
+
+        JNIEnv *myNewEnv;
+        JavaVMAttachArgs args;
+        args.version = JNI_VERSION_1_6; // choose your JNI version
+        args.name = NULL; // you might want to give the java thread a name
+        args.group = NULL; // you might want to assign the java thread to a ThreadGroup
+        gvm->AttachCurrentThread(&myNewEnv, &args);
+        jstring jstr = myNewEnv->NewStringUTF(b.toString().c_str());
+        gvm->DetachCurrentThread();
+
+        Java_com_alecive_yarpdroid_yarpviewFragment_getDataReceivedonPort(env,obj,jstr);
+    }
+
+    public:
+        GlassDataProcessor(JNIEnv *_env, jobject _obj): env(_env), obj(_obj) {};
+};
+
+
+class MobileDataProcessor : public TypedReaderCallback<Bottle> {
+    JNIEnv *env;
+    jobject obj;
+
+    virtual void onRead(Bottle& b) {
+        __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "DATA RECEIVED!");
+
+        JNIEnv *myNewEnv;
+        JavaVMAttachArgs args;
+        args.version = JNI_VERSION_1_6; // choose your JNI version
+        args.name = NULL; // you might want to give the java thread a name
+        args.group = NULL; // you might want to assign the java thread to a ThreadGroup
+        gvm->AttachCurrentThread(&myNewEnv, &args);
+        jstring jstr = myNewEnv->NewStringUTF(b.toString().c_str());
+        gvm->DetachCurrentThread();
+
+        Java_com_alecive_yarpdroid_yarpviewFragment_getDataReceivedonPort(env,obj,jstr);
+    }
+
+    public:
+        MobileDataProcessor(JNIEnv *_env, jobject _obj): env(_env), obj(_obj) {};
+};
+
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_getDataReceivedonPort (JNIEnv *env, jobject obj, jstring jstr)
+{
+    JavaVMAttachArgs args;
+    args.version = JNI_VERSION_1_6; // choose your JNI version
+    args.name = NULL; // you might want to give the java thread a name
+    args.group = NULL; // you might want to assign the java thread to a ThreadGroup
+    gvm->AttachCurrentThread(&env, &args);
+
+    jclass cls=env->GetObjectClass(obj);
+    jmethodID method=env->GetMethodID(cls, "nonStaticTestMethod", "(Ljava/lang/String;)V");
+
+    if(env->ExceptionCheck()) {
+        env->ExceptionDescribe();
+        env->ExceptionClear();
+        return;
+    }
+
+    // jstring jstr = env->NewStringUTF("Hello from C NONSTATIC");
+    env->CallVoidMethod(obj, method, jstr);
+    gvm->DetachCurrentThread();
+}
 JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_register
   (JNIEnv *env, jobject obj)
 {
@@ -197,4 +265,127 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBu
     delete MonoPortO;
     MonoPortO = 0;
     return (jboolean)true;
+}
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedGlassSensorDataPort
+  (JNIEnv *env, jobject obj, jstring _applicationName)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the sensor port");
+    if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
+    }
+
+    GlassDataProcessor* processor = new GlassDataProcessor(env, obj);
+    BufferedPort<Bottle> *GlassSensorPort;
+    GlassSensorPort = new BufferedPort<Bottle>;
+    GlassSensorPort->useCallback(*processor);
+
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/glasssensor:o";
+    if(!GlassSensorPort->open(portName.c_str()))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
+        delete GlassSensorPort;
+        GlassSensorPort = 0;
+        return (jboolean)false;
+    }
+
+    setHandle(env, obj, GlassSensorPort, "glassSensorPortHandle");
+    return (jboolean)true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedGlassSensorDataPort
+  (JNIEnv *env, jobject obj)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the buffered port");
+    BufferedPort<Bottle>  *GlassSensorPort = getHandle<BufferedPort<Bottle>  >(env, obj, "glassSensorPortHandle");
+    GlassSensorPort->close();
+    delete GlassSensorPort;
+    GlassSensorPort = 0;
+    return (jboolean)true;
+}
+
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_writeOntoBufferedGlassPort
+  (JNIEnv *env, jobject obj, jdouble accelerometer1, jdouble accelerometer2, jdouble accelerometer3, jdouble gyroscope1, jdouble gyroscope2, jdouble gyroscope3)
+{
+    BufferedPort<Bottle>  *GlassSensorPort = getHandle<BufferedPort<Bottle>  >(env, obj, "glassSensorPortHandle");
+    Bottle& GlassBottle = GlassSensorPort->prepare();
+    GlassBottle.clear();
+    GlassBottle.addDouble((double)accelerometer1);
+    GlassBottle.addDouble((double)accelerometer2);
+    GlassBottle.addDouble((double)accelerometer3);
+    GlassBottle.addDouble((double)gyroscope1);
+    GlassBottle.addDouble((double)gyroscope2);
+    GlassBottle.addDouble((double)gyroscope3);
+
+//    std::stringstream ss;
+//    ss << accelerometer1 << " " << accelerometer2 << " " << accelerometer3 << " " << gyroscope1 << " " << gyroscope2 << " " << gyroscope3 << std::endl;
+//    __android_log_write(ANDROID_LOG_DEBUG, "yarpviewFragment C++", ss.str().c_str());
+
+    GlassSensorPort -> write();
+}
+
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_createBufferedMobileSensorDataPort
+  (JNIEnv *env, jobject obj, jstring _applicationName)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the sensor port");
+    if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
+    }
+
+    MobileDataProcessor* processor = new MobileDataProcessor(env, obj);
+    BufferedPort<Bottle> *MobileSensorPort;
+    MobileSensorPort = new BufferedPort<Bottle>;
+    MobileSensorPort->useCallback(*processor);
+
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/mobilesensor:o";
+    if(!MobileSensorPort->open(portName.c_str()))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
+        delete MobileSensorPort;
+        MobileSensorPort = 0;
+        return (jboolean)false;
+    }
+
+    setHandle(env, obj, MobileSensorPort, "mobileSensorPortHandle");
+    return (jboolean)true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_destroyBufferedMobileSensorDataPort
+  (JNIEnv *env, jobject obj)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the buffered port");
+    BufferedPort<Bottle>  *MobileSensorPort = getHandle<BufferedPort<Bottle>  >(env, obj, "mobileSensorPortHandle");
+    MobileSensorPort->close();
+    delete MobileSensorPort;
+    MobileSensorPort = 0;
+    return (jboolean)true;
+}
+
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_yarpviewFragment_writeOntoBufferedMobilePort
+  (JNIEnv *env, jobject obj, jdouble accelerometer1, jdouble accelerometer2, jdouble accelerometer3, jdouble gyroscope1, jdouble gyroscope2, jdouble gyroscope3,
+  jdouble orientation1, jdouble orientation2, jdouble orientation3, jstring movementType)
+{
+    BufferedPort<Bottle>  *MobileSensorPort = getHandle<BufferedPort<Bottle>  >(env, obj, "mobileSensorPortHandle");
+    Bottle& MobileBottle = MobileSensorPort->prepare();
+    MobileBottle.clear();
+    MobileBottle.addDouble((double)accelerometer1);
+    MobileBottle.addDouble((double)accelerometer2);
+    MobileBottle.addDouble((double)accelerometer3);
+    MobileBottle.addDouble((double)gyroscope1);
+    MobileBottle.addDouble((double)gyroscope2);
+    MobileBottle.addDouble((double)gyroscope3);
+    MobileBottle.addDouble((double)orientation1);
+    MobileBottle.addDouble((double)orientation2);
+    MobileBottle.addDouble((double)orientation3);
+    MobileBottle.addString(env->GetStringUTFChars(movementType, 0));
+
+//    std::stringstream ss;
+//    ss << accelerometer1 << " " << accelerometer2 << " " << accelerometer3 << " " << gyroscope1 << " " << gyroscope2 << " " << gyroscope3 << std::endl;
+//    __android_log_write(ANDROID_LOG_DEBUG, "yarpviewFragment C++", ss.str().c_str());
+
+    MobileSensorPort -> write();
 }

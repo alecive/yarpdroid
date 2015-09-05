@@ -18,43 +18,81 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/action_1"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/white"
             android:id="@+id/btnAction1"
             android:background="@color/button_color"
             android:elevation="16dp"
-            android:padding="24dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/action_2"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/white"
             android:id="@+id/btnAction2"
             android:background="@color/button_color"
             android:elevation="16dp"
-            android:padding="24dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/action_3"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/white"
             android:id="@+id/btnAction3"
             android:background="@color/button_color"
             android:elevation="16dp"
-            android:padding="24dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="40dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start Motion Sensors"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:id="@+id/btnStartSensor"
+            android:background="@color/button_color"
+            android:elevation="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Stop Motion Sensors"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:id="@+id/btnStopSensor"
+            android:background="@color/button_color"
+            android:elevation="16dp"
+            android:padding="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <ToggleButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Orientation"
+            android:textOff="Orientation Mode"
+            android:textOn="Position Mode"
+            android:id="@+id/toggleButtonMovementType"
+            android:textColor="@color/white"
+            android:background="@color/button_color"
+            android:elevation="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:checked="false" />
     </LinearLayout>
 
     <LinearLayout

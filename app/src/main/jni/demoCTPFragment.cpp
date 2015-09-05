@@ -127,3 +127,64 @@ JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_destroyRPC
     demoCTPRPC = 0;
     return (jboolean)true;
 }
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_createBufferedMobileSensorDataPort
+  (JNIEnv *env, jobject obj, jstring _applicationName)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm creating the sensor port");
+    if (putenv("YARP_CONF=/data/data/com.alecive.yarpdroid/files/yarpconf"))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Putenv failed %d", errno);
+    }
+
+    BufferedPort<Bottle> *MobileSensorPort;
+    MobileSensorPort = new BufferedPort<Bottle>;
+
+    std::string portName=env->GetStringUTFChars(_applicationName, 0);
+    portName = portName + "/mobilesensor:o";
+    if(!MobileSensorPort->open(portName.c_str()))
+    {
+        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Error in opening port!");
+        delete MobileSensorPort;
+        MobileSensorPort = 0;
+        return (jboolean)false;
+    }
+
+    setHandle(env, obj, MobileSensorPort, "mobileSensorPortHandle");
+    return (jboolean)true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_destroyBufferedMobileSensorDataPort
+  (JNIEnv *env, jobject obj)
+{
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "I'm destroying the buffered port");
+    BufferedPort<Bottle>  *MobileSensorPort = getHandle<BufferedPort<Bottle>  >(env, obj, "mobileSensorPortHandle");
+    MobileSensorPort->close();
+    delete MobileSensorPort;
+    MobileSensorPort = 0;
+    return (jboolean)true;
+}
+
+JNIEXPORT void JNICALL Java_com_alecive_yarpdroid_demoCTPFragment_writeOntoBufferedMobilePort
+  (JNIEnv *env, jobject obj, jdouble accelerometer1, jdouble accelerometer2, jdouble accelerometer3, jdouble gyroscope1, jdouble gyroscope2, jdouble gyroscope3,
+  jdouble orientation1, jdouble orientation2, jdouble orientation3, jstring movementType)
+{
+    BufferedPort<Bottle>  *MobileSensorPort = getHandle<BufferedPort<Bottle>  >(env, obj, "mobileSensorPortHandle");
+    Bottle& MobileBottle = MobileSensorPort->prepare();
+    MobileBottle.clear();
+    MobileBottle.addDouble((double)accelerometer1);
+    MobileBottle.addDouble((double)accelerometer2);
+    MobileBottle.addDouble((double)accelerometer3);
+    MobileBottle.addDouble((double)gyroscope1);
+    MobileBottle.addDouble((double)gyroscope2);
+    MobileBottle.addDouble((double)gyroscope3);
+    MobileBottle.addDouble((double)orientation1);
+    MobileBottle.addDouble((double)orientation2);
+    MobileBottle.addDouble((double)orientation3);
+    MobileBottle.addString(env->GetStringUTFChars(movementType, 0));
+
+//    std::stringstream ss;
+//    ss << accelerometer1 << " " << accelerometer2 << " " << accelerometer3 << " " << gyroscope1 << " " << gyroscope2 << " " << gyroscope3 << std::endl;
+//    __android_log_write(ANDROID_LOG_DEBUG, "yarpviewFragment C++", ss.str().c_str());
+
+    MobileSensorPort -> write();
+}
