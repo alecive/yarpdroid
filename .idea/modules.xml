@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yarpcommon/yarpcommon.iml" filepath="$PROJECT_DIR$/yarpcommon/yarpcommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/yarpdroid.iml" filepath="$PROJECT_DIR$/yarpdroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yarpglass/yarpglass.iml" filepath="$PROJECT_DIR$/yarpglass/yarpglass.iml" />
     </modules>
   </component>
 </project>
